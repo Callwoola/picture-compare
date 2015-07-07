@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>just show test image</title>
+  </head>
+  <body>
+
+<pre>
+rms = math.sqrt(
+reduce(operator.add, list(map(lambda a, b: (a - b) ** 2, h1, h2)))
+/
+len(h1)
+)
+</pre>
+<ul>
+{% for i in images %}
+
+     <li>
+         <img style="width:80px;height:80px;" src="{{ COMPARE_IMG }}"/>
+         <img style="width:80px;height:80px;" src="{{ i['url'] }}"/>
+         <span>{{ i['code'] }}</span>
+         <br>
+     </li>
+
+{% end %}
+</ul>
+
+
+
+
+  </body>
+</html>
