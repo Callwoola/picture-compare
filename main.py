@@ -16,7 +16,7 @@ def sortPicCode(list):
     pass
 
 
-PROJECT_DIR = "D:/code/image/"
+PROJECT_DIR = "/Users/liyang/Code/pictureCompare/"
 IMAGE_DIR = "image/"
 IMAEG_PATH = PROJECT_DIR + "img/"
 
@@ -25,10 +25,10 @@ COMPARE_IMG = "1.jpg"
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        loader = tornado.template.Loader("./")
+        loader = tornado.template.Loader(PROJECT_DIR+"web/")
         image = lib.Image.image()
         images = image.getImageList(IMAEG_PATH, IMAGE_DIR)
-
+        print images
         for i in range(0, len(images)):
             images[i]['code'] = image.diff(IMAEG_PATH + COMPARE_IMG,
                                            images[i]['path']
