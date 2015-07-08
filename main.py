@@ -6,7 +6,7 @@ import tornado.template
 
 import lib.Image
 # from template import tornado
-
+import os
 
 def sortPicCode(list):
     # returnList=[]
@@ -16,7 +16,7 @@ def sortPicCode(list):
     pass
 
 
-PROJECT_DIR = "D:/code/image/"
+PROJECT_DIR = os.getcwd()#"D:/code/image/"
 IMAGE_DIR = "image/"
 IMAEG_PATH = PROJECT_DIR + "img/"
 
