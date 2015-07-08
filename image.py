@@ -1,64 +1,55 @@
 # coding:utf-8
 
+import glob
+import os
+import sys
+
 from PIL import Image
-# import Image
-import math
-import operator
-import pyquery
 
-def getImage():
-    pass
+EXTS = 'jpg', 'jpeg', 'JPG', 'JPEG', 'gif', 'GIF', 'png', 'PNG'
 
 
-class imageDiff:
-    def open(self):
-        pass
-
-# sudo pip install PIL
-'''
-    to open the file
-'''
-def pil_image_similarity(filepath1, filepath2):
-    image1 = Image.open(filepath1)
-    image2 = Image.open(filepath2)
-
-    h1 = image1.histogram()
-    h2 = image2.histogram()
-
-    rms = math.sqrt(reduce(operator.add, list(map(lambda a, b: (a - b) ** 2, h1, h2))) / len(h1))
-    return rms
+def avhash(im):
+    if not isinstance(im, Image.Image):
+        im = Image.open(im)
+    im = im.resize((8, 8), Image.ANTIALIAS).convert('L')
+    avg = reduce(lambda x, y: x + y, im.getdata()) / 64.
+    return reduce(lambda x, (y, z): x | (z << y),
+                  enumerate(map(lambda i: 0 if i < avg else 1, im.getdata())),
+                  0)
 
 
-"""
-@:return list
-"""
-def getImageList():
-    import os
-
-    rootDir = "./image"
-    fileSet = []
-
-    for dir_, _, files in os.walk(rootDir):
-        for fileName in files:
-            relDir = os.path.relpath(dir_, rootDir)
-            relFile = os.path.join(relDir, fileName)
-            # fileSet.add(relFile)
-            fileSet.append(relFile)
-    return fileSet
+def hamming(h1, h2):
+    h, d = 0, h1 ^ h2
+    while d:
+        h += 1
+        d &= d - 1
+    return h
 
 
-path = "./image/"
-firstImg = path + "1.jpg"
-for i in getImageList():
-    print pil_image_similarity(
-        firstImg,
-        path+i
-    )
+if __name__ == '__main__':
 
+    im="d:/code/image/test.jpg"
+    wd="d:/code/image/img/img1/"
+    h = avhash(im)
 
-    # i1 = path + "6.jpg"
-    # i2 = path + "9.jpg"
-    # i3 = path + "1.jpg"
-    #
-    # print pil_image_similarity(i1, i2)
-    # print pil_image_similarity(i1, i3)
+    os.chdir(wd)
+    images = []
+    for ext in EXTS:
+        images.extend(glob.glob('*.%s' % ext))
+
+    seq = []
+    prog = int(len(images) > 50 and sys.stdout.isatty())
+    for f in images:
+        seq.append((f, hamming(avhash(f), h)))
+        if prog:
+            perc = 100. * prog / len(images)
+            x = int(2 * perc / 5)
+            print '\rCalculating... [' + '#' * x + ' ' * (40 - x) + ']',
+            print '%.2f%%' % perc, '(%d/%d)' % (prog, len(images)),
+            sys.stdout.flush()
+            prog += 1
+
+    if prog: print
+    for f, ham in sorted(seq, key=lambda i: i[1]):
+        print "%d\t%s" % (ham, f)

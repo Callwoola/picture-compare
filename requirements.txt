@@ -1,4 +1,16 @@
-Jinja2==2.7.3
-Pillow==2.5.1
-PyYAML==3.11
-tornado==4.1
+jinja2==2.7.3
+lxml==3.4.4	3.4.4
+markupsafe==0.23
+matplotlib==1.4.3
+numpy==1.9.2
+opencv-python==2.4.11
+pil==1.1.7
+pillow==2.9.0
+pip==7.1.0
+pyparsing==2.0.3
+python-dateutil==2.4.2
+scipy==0.15.1
+setuptools==18.0.1
+six==1.9.0
+tornado==4.2
+wheel==0.24.0

@@ -11,19 +11,22 @@ reduce(operator.add, list(map(lambda a, b: (a - b) ** 2, h1, h2)))
 len(h1)
 )
 </pre>
-<ul>
-{% for i in images %}
+{% for package in package_image %}
+    <ul>
+        {% for i in package %}
 
-     <li>
-         <img style="width:80px;height:80px;" src="{{ COMPARE_IMG }}"/>
-         <img style="width:80px;height:80px;" src="{{ i['url'] }}"/>
-         <span>{{ i['code'] }}</span>
-         <br>
-     </li>
+             <li>
+                 <img style="width:80px;height:80px;" src="{{ i['origin_img'] }}"/>
+                 <img style="width:80px;height:80px;" src="{{ i['url'] }}"/>
+                 <span><b>base:</b>{{ i['code'] }}</span>//
+                 <span><b>mes:</b>{{ i['code2'] }}</span>//
+                 <span><b>perceptualHash:</b>{{ i['code3'] }}</span>
+                 <br>
+             </li>
 
+        {% end %}
+    </ul>
 {% end %}
-</ul>
-
 
 
 

@@ -1,5 +1,6 @@
 # coding:utf-8
 
+#from skimage.measure import structural_similarity as ssim
 from skimage.measure import structural_similarity as ssim
 import matplotlib.pyplot as plt
 import numpy as np
@@ -38,12 +39,15 @@ def compare_images(imageA, imageB, title):
     # compute the mean squared error and structural similarity
     # index for the images
     m = mse(imageA, imageB)
+    print title
+    print m
+    print "-----"
     s = ssim(imageA, imageB)
 
     # setup the figure
     fig = plt.figure(title)
     plt.suptitle("MSE: %.2f, SSIM: %.2f" % (m, s))
-
+    #plt.suptitle("MSE: %.2f, SSIM: ??" % (m))
     # show first image
     ax = fig.add_subplot(1, 2, 1)
     plt.imshow(imageA, cmap=plt.cm.gray)
@@ -59,9 +63,12 @@ def compare_images(imageA, imageB, title):
 
 # load the images -- the original, the original + contrast,
 # and the original + photoshop
-original = cv2.imread("img2/jp_gates_original.png")
-contrast = cv2.imread("img2/jp_gates_contrast.png")
-shopped = cv2.imread("img2/jp_gates_photoshopped.png")
+
+
+
+original = cv2.imread("img/img2/jp_gates_contrast.png")
+contrast = cv2.imread("img/img2/jp_gates_original.png")
+shopped = cv2.imread("img/img2/jp_gates_photoshopped.png")
 
 # convert the images to grayscale
 original = cv2.cvtColor(original, cv2.COLOR_BGR2GRAY)
@@ -70,8 +77,8 @@ shopped = cv2.cvtColor(shopped, cv2.COLOR_BGR2GRAY)
 
 # initialize the figure
 fig = plt.figure("Images")
-# images = ("Original", original), ("Contrast", contrast), ("Photoshopped", shopped)
-images = ("Original", original), ("Contrast", contrast)
+images = ("Original", original), ("Contrast", contrast), ("Photoshopped", shopped)
+#images = ("Original", original), ("Contrast", contrast)
 # loop over the images
 for (i, (name, image)) in enumerate(images):
     # show the image
@@ -86,4 +93,4 @@ plt.show()
 # compare the images
 compare_images(original, original, "Original vs. Original")
 compare_images(original, contrast, "Original vs. Contrast")
-# compare_images(original, shopped, "Original vs. Photoshopped")
+compare_images(original, shopped, "Original vs. Photoshopped")
