@@ -1,7 +1,7 @@
 # coding:utf-8
 
 
-class image:
+class Image:
     def __init__(self):
         pass
 

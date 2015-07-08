@@ -1,11 +1,5 @@
 # coding:utf-8
-import os
-
 class Image:
-    """
-    NOTE  得到两个图片 对比值
-    """
-
     image_a_path = ""
     image_b_path = ""
 
@@ -23,6 +17,7 @@ class Image:
     pass
 
     def start(self):
+        import os
         from PIL import Image
         imA=Image.open(self.image_a_path)
         imB=Image.open(self.image_b_path)
