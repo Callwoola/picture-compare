@@ -283,3 +283,4 @@ vendor/
 
 ### python ###
 *.pyc
+tests/tmp/*

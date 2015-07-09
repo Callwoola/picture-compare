@@ -15,6 +15,7 @@ class Manage:
         :return:
         '''
         import os
+
         imgList = []
         print project_img_path
         for dir_, _, files in os.walk(project_img_path):
@@ -28,7 +29,7 @@ class Manage:
     # ----------------------------------------------------------
     # return the package first file name
     # ----------------------------------------------------------
-    def getFirst(self,project_img_path):
+    def getFirst(self, project_img_path):
         '''
         :param project_img_path:
         :return:
@@ -42,14 +43,15 @@ class Manage:
     # ----------------------------------------------------------
     # return path all file pull path name
     # ---------------------------------------------------------
-    def getPathAllFile(self,PATH):
+    def getPathAllFile(self, PATH):
         '''
         :param PATH:
         :return:
         '''
-        import os,glob
-        pathList=[]
+        import os, glob
+
+        pathList = []
         os.chdir(PATH)
         for i in glob.glob('*'):
-            pathList.append(os.getcwd()+"/"+i)
+            pathList.append(os.getcwd() + "/" + i)
         return pathList

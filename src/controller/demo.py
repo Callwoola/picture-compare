@@ -1,10 +1,11 @@
+#coding:utf-8
 import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from lib import Image
-from lib import Manage
-from lib import Compare
+from src.lib import Image
+from src.lib import Manage
+from src.lib import Compare
 
 PROJECT_DIR = "D:/code/image/"
 STATIC_DIR = "img/"
@@ -12,13 +13,14 @@ PROJECT_DIR_IMG = PROJECT_DIR + "img/"
 COMPARE_IMG = "1.jpg"
 TEMPLATE_DIR = PROJECT_DIR + "template/"
 
+
 class DemoHandler(tornado.web.RequestHandler):
     def get(self):
         loader = tornado.template.Loader(TEMPLATE_DIR)
         image = Image.Image()
         compare = Compare.Image()
         packages = ["img1/", "img2/", "img4/"]
-        manage=Manage.Manage()
+        manage = Manage.Manage()
         package_image = []
         for package in packages:
             # --------------------------
@@ -57,34 +59,60 @@ class DemoSearchHandler(tornado.web.RequestHandler):
         self.write(tornado.template.Loader(TEMPLATE_DIR).load("search.html").generate(
             action='upload_search'
         ))
-"""
-TODO search test
-"""
+
+
+
 class DemoUploadSearchHandler(tornado.web.RequestHandler):
+    """
+    TODO search test
+    """
     def post(self):
         import StringIO
         from PIL import Image
-        from lib import Manage
+        from src.lib import Manage
+        from src.lib import Compare
+        import os
+
         try:
+            compare = Compare.Image()
             imgfiles = self.request.files['file_img']
-            if len(imgfiles)>1:
+            if len(imgfiles) > 1:
                 return self.write("error")
             imgfile = imgfiles[0]
-            filename=imgfile['filename']
-            Image.open(StringIO.StringIO(imgfile['body'])).save(filename)
+            filename = imgfile['filename'].strip()
+            print filename
+            print len(filename)
+            tmp = PROJECT_DIR + "tests/tmp/"
+            tmp_image = tmp + filename
+            Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
 
-            path=PROJECT_DIR+"tests/img/img1/"
+            path = PROJECT_DIR + "tests/img/"
             # start compare imgs
-            manage=Manage.Manage()
-            result=[]
+            manage = Manage.Manage()
+            results = []
+            # ------------------------------------------
+            # result must got to sort and set size
+            # maybe add index for quick find image
+
             for i in manage.getPathAllFile(path):
-                print result.append({
-                    ''
+                compare.setA(tmp_image)
+                compare.setB(i)
+                compare.start()
+                results.append({
+                    'code1': compare.phash(),
+                    'filename': os.path.basename(i),
+                    'code2': compare.mse(),
+                    'code3': compare.mse(),
                 })
+                compare.end()
+            # ---------------------------------------------
+            # simple sort list by code
+            results = sorted(results, key=lambda k: k['code1'])
+            print results
             self.write(tornado.template.Loader(TEMPLATE_DIR).load("search_result.html").generate(
-                action='upload_search',
-                result=result
+                origin_img=filename,
+                results=results,
             ))
-        except Exception,e:
+        except Exception, e:
             print e
             self.redirect('search')
