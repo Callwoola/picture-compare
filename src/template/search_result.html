@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>just show test image</title>
+</head>
+<body>
+<header>
+    <a href="/">Home</a>
+
+</header>
+<ul>
+    {% for result in results%}
+    <li>
+        <img style="width:60px;height:60px;" src="tests/tmp/{{ origin_img }}"/>
+        <img style="width:60px;height:60px;" src="tests/img/{{ result['filename'] }}">
+        <span>{{result['code1']}}</span> //
+        <span>{{result['code2']}}</span> //
+        <span>{{result['code3']}}</span> //
+        <span>{{ result['filename'] }}</span>
+    </li>
+    {% end %}
+</ul>
+</body>
+</html>
