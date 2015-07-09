@@ -1,5 +1,9 @@
 # coding:utf-8
 class Image:
+    '''
+    Compare Image differ  I find some useful function
+    Maybe Some function would suit for you Project
+    '''
     image_a_path = ""
     image_b_path = ""
 
@@ -29,8 +33,10 @@ class Image:
         pass
 
     def end(self):
+        import os
         os.remove(self.image_b_path)
         pass
+
     # ----------------------------------------------------------
     # mse
     #
@@ -39,6 +45,9 @@ class Image:
     # NOTE: the two images must have the same dimension
     # ----------------------------------------------------------
     def mse(self):
+        """
+        :return: float
+        """
         import numpy as np
         import cv2
 
@@ -59,7 +68,10 @@ class Image:
     # return the MSE, the lower the error, the more "similar"
     # NOTE: the two images must have the same dimension
     # ----------------------------------------------------------
-    def base(self):
+    def phash(self):
+        """phash compare If histogram smooth
+        :return: float
+        """
         import math
         import operator
         from PIL import Image
@@ -67,8 +79,8 @@ class Image:
         image1 = Image.open(self.image_a_path)
         image2 = Image.open(self.image_b_path)
 
-        h1 = image1.histogram()
-        h2 = image2.histogram()
+        h1 = image1.convert('RGB').histogram()
+        h2 = image2.convert('RGB').histogram()
 
         rms = math.sqrt(
             reduce(operator.add, list(map(lambda a, b: (a - b) ** 2, h1, h2)))
@@ -86,6 +98,9 @@ class Image:
     # NOTE: the two images must have the same dimension
     # ----------------------------------------------------------
     def correlate2d(self):
+        """So fucking slow
+        :return: float
+        """
         import scipy as sp
         from scipy.misc import imread
         from scipy.signal.signaltools import correlate2d
@@ -104,6 +119,9 @@ class Image:
     # very quick 8 x 8
     # ----------------------------------------------------------
     def perceptualHash(self):
+        '''
+        huhh...
+        '''
         from PIL import Image
         def avhash(im):
             if not isinstance(im, Image.Image):

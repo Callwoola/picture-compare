@@ -1,26 +1,23 @@
 # coding:utf-8
 
-
 class Image:
-    def __init__(self):
-        pass
 
-    def getImageList(self, project_img_path, package_path):
-        import os
-        imgList = []
-        print project_img_path
-        for dir_, _, files in os.walk(project_img_path):
-            print files
-            for fileName in files:
-                imgList.append({"url": package_path + fileName,
-                                "path": project_img_path + fileName,
-                                })
-        return imgList
+    # ----------------------------------------------------------
+    # get picture color
+    # @:return str
+    # ----------------------------------------------------------
+    def getRgbaString(self,path):
+        from PIL import Image
+        r, g, b, a = Image.open(path).convert('RGBA').resize((1, 1)).getcolors()[0][1]
+        return "rgba(%d, %d, %d, %d)" % (r, g, b, a)
+    pass
 
-
-    def getFirst(self,project_img_path):
-        import os
-        for dir_, _, files in os.walk(project_img_path):
-            for fileName in files:
-                return fileName
-        return None
+    # ----------------------------------------------------------
+    # get picture color
+    # @:return
+    # ----------------------------------------------------------
+    def getRgba(self,path):
+        from PIL import Image
+        r, g, b, a = Image.open(path).convert('RGBA').resize((1, 1)).getcolors()[0][1]
+        return (r, g, b, a)
+    pass
