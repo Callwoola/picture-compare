@@ -99,6 +99,7 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
                     'code1': compare.phash(),
                     'code2': compare.mse(),
                     'code3': compare.perceptualHash(),
+                    'code4': compare.colorCompare(),
                     'code_mix': compare.mixHash(),
                     'color': imagetool.getRgbString(i),
                 })

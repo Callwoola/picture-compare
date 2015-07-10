@@ -30,7 +30,8 @@ def check_self():
     :return:
     '''
     pass
-
+def info(str):
+    print str
 # settings = {'debug': True}
 application = tornado.web.Application([
     (r"/", demo.DemoHandler),
@@ -43,11 +44,14 @@ application = tornado.web.Application([
 
 if __name__ == "__main__":
     config_yaml()
+    info('config successful ... ')
     application.listen(8888)
     application.debug = True
     # application.autoreload=False
+    info('Picture-Compare service runing ...')
     tornado \
         .ioloop \
         .IOLoop \
         .current() \
         .start()
+
