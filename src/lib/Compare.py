@@ -7,6 +7,10 @@ class Image:
     image_a_path = ""
     image_b_path = ""
 
+    value_of_phash = None
+    value_of_mse = None
+    value_of_perceptualHash = None
+
     def __init__(self, A=None, B=None):
         # image A is String of path
         # image B is String of path
@@ -14,26 +18,30 @@ class Image:
 
     def setA(self, path):
         self.image_b_path = path
+
     pass
 
     def setB(self, path):
         self.image_a_path = path
+
     pass
 
     def start(self):
         import os
         from PIL import Image
-        imA=Image.open(self.image_a_path)
-        imB=Image.open(self.image_b_path)
+
+        imA = Image.open(self.image_a_path)
+        imB = Image.open(self.image_b_path)
         if not imA.size is imB.size:
-            name="temp."+os.path.basename(self.image_a_path).split('.')[1]
-            currentName=os.path.dirname(self.image_a_path)+name
+            name = "temp." + os.path.basename(self.image_a_path).split('.')[1]
+            currentName = os.path.dirname(self.image_a_path) + name
             imB.resize(imA.size).save(currentName)
-            self.image_b_path=currentName
+            self.image_b_path = currentName
         pass
 
     def end(self):
         import os
+
         os.remove(self.image_b_path)
         pass
 
@@ -59,6 +67,7 @@ class Image:
 
         err = np.sum((imageA.astype("float") - imageB.astype("float")) ** 2)
         err /= float(imageA.shape[0] * imageA.shape[1])
+        self.value_of_mse = err
         return err
 
     # ----------------------------------------------------------
@@ -87,8 +96,8 @@ class Image:
             /
             len(h1)
         )
+        self.value_of_phash = rms
         return rms
-
 
     # ----------------------------------------------------------
     # correlate2d
@@ -110,9 +119,9 @@ class Image:
             data = sp.inner(data, [299, 587, 114]) / 1000.0
             return (data - data.mean()) / data.std()
 
-        return correlate2d(get(self.image_a_path),
-                           get(self.image_b_path)).max()
-
+        value = correlate2d(get(self.image_a_path),
+                            get(self.image_b_path)).max()
+        return value
 
     # ----------------------------------------------------------
     # perceptual Hash
@@ -123,6 +132,7 @@ class Image:
         huhh...
         '''
         from PIL import Image
+
         def avhash(im):
             if not isinstance(im, Image.Image):
                 im = Image.open(im)
@@ -138,6 +148,42 @@ class Image:
                 h += 1
                 d &= d - 1
             return h
+
         a = avhash(self.image_a_path)
         b = avhash(self.image_b_path)
-        return hamming(a, b)
+        value = hamming(a, b)
+        self.value_of_perceptualHash = value
+        return value
+
+    # ----------------------------------------------------------
+    # mix Hash
+    # ----------------------------------------------------------
+    def mixHash(self):
+        '''
+        get a mix score
+        :return:
+        '''
+        if not self.value_of_mse is None and \
+                not self.value_of_perceptualHash is None and \
+                not self.value_of_phash is None:
+            return self.value_of_perceptualHash * 1000 + \
+                   self.value_of_phash * 1.5 + \
+                   self.value_of_mse * 0.8
+        return None
+        # --------------------
+        # waiting ...
+        # color value
+        pass
+
+    # ----------------------------------------------------------
+    # color compare
+    # ----------------------------------------------------------
+    def colorCompare(self):
+        '''
+        :return:
+        '''
+        from src.module.RGB_module import RGB_module
+        rgb1 = RGB_module(self.image_a_path).get()
+        print rgb1
+        print
+        return None
