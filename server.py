@@ -4,6 +4,7 @@ import tornado.ioloop
 import tornado.web
 import tornado.template
 from src.controller import demo
+from src.controller import search
 
 PROJECT_DIR = "D:/code/image/"
 STATIC_DIR = "img/"
@@ -40,6 +41,11 @@ application = tornado.web.Application([
 
     (r'/img/(.*)', tornado.web.StaticFileHandler, {'path': PROJECT_DIR_IMG}),
     (r'/tests/(.*)', tornado.web.StaticFileHandler, {'path': PROJECT_DIR+'/tests'}),
+
+
+
+    #---------------------------------------------
+    (r'/_search/json/(.*)', search.JsonHandler),
 ])
 
 if __name__ == "__main__":
