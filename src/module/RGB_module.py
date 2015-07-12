@@ -14,8 +14,8 @@ class RGB_module(pc_module):
         pass
 
     def get(self):
-        return {"rgb":im.Image().getRgb(self.path),
-                "name":"noname",
-                ""
-        }
+        return {"rgb": im.Image().getRgb(self.path),
+                "name": "noname",
+                "": ""
+                }
 

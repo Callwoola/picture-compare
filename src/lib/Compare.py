@@ -188,13 +188,42 @@ class Image:
         （R1-R2)^2   +   (G1-G2)^2   +   (B1-B2)^2   的值的平方根，即颜色空间的距离
         距离越大，差距就越大。
 
-        方法3:计算两个三维向量的夹角
+        '''
+        from PIL import Image as im
+
+        def getRgb(path):
+            r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
+            return [r, g, b]
+
+        RGB_A = getRgb(self.image_a_path)
+        RGB_B = getRgb(self.image_b_path)
+
+        score= (RGB_A[0] - RGB_B[0]) ^ 2 + (RGB_A[1] - RGB_B[1]) ^ 2 + (RGB_A[2] - RGB_B[2]) ^ 2
+        print score
+        return score
+        # from src.module.RGB_module import RGB_module
+        # rgb1 = RGB_module(self.image_a_path).get()
+        # print rgb1
+        # print
+        return None
+
+
+    def colorTriangleCompare(self):
+        '''
+        计算两个三维向量的夹角
         l1=sqrt(r1*r1+g1*g1+b1*b1);
         l2=sqrt(r2*r2+g2*g2+b2*b2);
         cos(a)=(r1*r2+g1*g2+b1*b2)/(l1*l2);
         '''
-        from src.module.RGB_module import RGB_module
-        rgb1 = RGB_module(self.image_a_path).get()
-        print rgb1
-        print
-        return None
+        from PIL import Image as im
+
+        def getRgb(path):
+            r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
+            return [r, g, b]
+        #
+        # RGB_A = getRgb(self.image_a_path)
+        # RGB_B = getRgb(self.image_b_path)
+        # l1=sqrt(r1*r1+g1*g1+b1*b1)
+        # l2=sqrt(r2*r2+g2*g2+b2*b2)
+        # cos(a)=(r1*r2+g1*g2+b1*b2)/(l1*l2)
+        return

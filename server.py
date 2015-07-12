@@ -5,10 +5,7 @@ import tornado.web
 import tornado.template
 from src.controller import demo
 from src.controller import search
-
-PROJECT_DIR = "D:/code/image/"
-STATIC_DIR = "img/"
-PROJECT_DIR_IMG = PROJECT_DIR + "img/"
+from src import config
 
 
 def config_yaml():
@@ -17,7 +14,6 @@ def config_yaml():
     :return:
     '''
     import yaml
-    from src import config
     yaml_config=yaml.load(open("./config.yaml"))
     for line in yaml_config:
         if hasattr(config,line.upper()):
@@ -34,13 +30,14 @@ def check_self():
 def info(str):
     print str
 # settings = {'debug': True}
+config_yaml()
 application = tornado.web.Application([
     (r"/", demo.DemoHandler),
     (r"/search", demo.DemoSearchHandler),
     (r"/upload_search", demo.DemoUploadSearchHandler),
 
-    (r'/img/(.*)', tornado.web.StaticFileHandler, {'path': PROJECT_DIR_IMG}),
-    (r'/tests/(.*)', tornado.web.StaticFileHandler, {'path': PROJECT_DIR+'/tests'}),
+    (r'/img/(.*)', tornado.web.StaticFileHandler, {'path': config.STATIC_DIR}),
+    #(r'/tests/(.*)', tornado.web.StaticFileHandler, {'path': config.PROJECT_DIR+'/t}),
 
 
 
@@ -49,7 +46,7 @@ application = tornado.web.Application([
 ])
 
 if __name__ == "__main__":
-    config_yaml()
+
     info('config successful ... ')
     application.listen(8888)
     application.debug = True

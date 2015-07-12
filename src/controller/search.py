@@ -24,3 +24,16 @@ class SearchHandler(tornado.web.RequestHandler):
         # is data is  Smooth  that is material else
 
         self.write('{error:404}')
+
+
+class JsonHandler(tornado.web.RequestHandler):
+    """
+    RESTFUL api style
+    """
+    def get(self):
+
+        # first to decide the picture type by histogram
+
+        # is data is  Smooth  that is material else
+
+        self.write('{error:404}')
