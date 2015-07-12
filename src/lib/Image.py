@@ -67,6 +67,6 @@ class Image:
         S = 1 - (3/(R+G+B))*(min(R,G,B))
 
         H = math.cos^-1( (((R-G)+(R-B))/2)/ (math.sqrt((R-G)^2 + (R-B)*(G-B) )))
-        
+
         return (H,S,I)
     pass
