@@ -45,14 +45,13 @@
 </ul>
 
 
-<h3>code4</h3>
+<h3>color Compare</h3>
 <ul>
     {% for result in results_code4 %}
     <li>
         <img style="width:60px;height:60px;" src="tests/tmp/{{ origin_img }}"/>
         <img style="width:60px;height:60px;" src="tests/img/{{ result['filename'] }}">
         <img style="width:60px;height:60px;background-color:{{result['color']}}">
-        <img style="width:60px;height:60px;background-color:{{result['color_package']['rgb']}}">
         <span>{{result['code4']}}</span> //
         <span>{{result['color_package']['keyname']}}</span> //
     </li>

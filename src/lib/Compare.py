@@ -75,8 +75,8 @@ class Image:
     # return the MSE, the lower the error, the more "similar"
     # NOTE: the two images must have the same dimension
     # ----------------------------------------------------------
-    def phash(self):
-        """phash compare If histogram smooth
+    def basehash(self):
+        """basehash compare If histogram smooth
         :return: float
         """
         import math
@@ -191,7 +191,7 @@ class Image:
             RGB_A = getRgb(self.image_a_path)
             RGB_B = getRgb(self.image_b_path)
         if len(RGB_A)==3 and len(RGB_B)==3:
-            score= (RGB_A[0] - RGB_B[0]) ^ 2 + (RGB_A[1] - RGB_B[1]) ^ 2 + (RGB_A[2] - RGB_B[2]) ^ 2
+            score= (RGB_A[0] - RGB_B[0]) ** 2 + (RGB_A[1] - RGB_B[1]) ** 2 + (RGB_A[2] - RGB_B[2]) ** 2
             return abs(score)
         return False
 
@@ -216,9 +216,9 @@ class Image:
             # print '------------------------'
             # print RGB_A
             # print RGB_B
-            score = (RGB_A[0] - RGB_B[0]) ^ 2 + (RGB_A[1] - RGB_B[1]) ^ 2 + (RGB_A[2] - RGB_B[2]) ^ 2
+            score = (RGB_A[0] - RGB_B[0]) ** 2 + (RGB_A[1] - RGB_B[1]) ** 2 + (RGB_A[2] - RGB_B[2]) ** 2
             # print  abs(score)
-            return abs(score)
+            return score
 
         for i in rgbList:
             key = i.keys()[0]
@@ -255,7 +255,7 @@ class Image:
             # print '------------------------'
             # print RGB_A
             # print RGB_B
-            score = (RGB_A[0] - RGB_B[0]) ^ 2 + (RGB_A[1] - RGB_B[1]) ^ 2 + (RGB_A[2] - RGB_B[2]) ^ 2
+            score = (RGB_A[0] - RGB_B[0]) ** 2 + (RGB_A[1] - RGB_B[1]) ** 2 + (RGB_A[2] - RGB_B[2]) ** 2
             # print  abs(score)
             return abs(score)
 
@@ -286,7 +286,6 @@ class Image:
         def getRgb(path):
             r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
             return [r, g, b]
-
         #
         # RGB_A = getRgb(self.image_a_path)
         # RGB_B = getRgb(self.image_b_path)

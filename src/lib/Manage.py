@@ -15,11 +15,8 @@ class Manage:
         :return:
         '''
         import os
-
         imgList = []
-        print project_img_path
         for dir_, _, files in os.walk(project_img_path):
-            print files
             for fileName in files:
                 imgList.append({"url": package_path + fileName,
                                 "path": project_img_path + fileName,

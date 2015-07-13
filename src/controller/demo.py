@@ -9,8 +9,18 @@ from src.lib import Compare
 from src import config
 
 
+
+class HomeHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(tornado.template
+                   .Loader(config.TEMPLATE)
+                   .load("index.html")
+                   .generate())
+
 class DemoHandler(tornado.web.RequestHandler):
     def get(self):
+        import os
+        os.chdir(config.PROJECT_DIR)
         loader = tornado.template.Loader(config.TEMPLATE)
         image = Image.Image()
         compare = Compare.Image()
@@ -31,7 +41,7 @@ class DemoHandler(tornado.web.RequestHandler):
                 images[i]['origin_img'] = config.STATIC_DIR + package + COMPARE_IMG
 
                 compare.start()
-                images[i]['code'] = compare.phash()
+                images[i]['code'] = compare.basehash()
                 images[i]['code2'] = compare.mse()
                 images[i]['code3'] = compare.perceptualHash()
 
@@ -72,7 +82,13 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
         from src.lib import Compare
         import os
         from src.lib import Image as ImageTool
+        import glob
         try:
+            os.chdir(config.PROJECT_DIR + "tests/tmp/")
+            for i in glob.glob('*'):
+                if '.py' not in i:
+                    os.remove(i)
+                    pass
             imagetool=ImageTool.Image()
             compare = Compare.Image()
             imgfiles = self.request.files['file_img']
@@ -82,6 +98,7 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
             filename = imgfile['filename'].strip()
 
             tmp = config.PROJECT_DIR + "tests/tmp/"
+
             tmp_image = tmp + filename
             Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
 
@@ -100,7 +117,7 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
 
                 results.append({
                     'filename': os.path.basename(i),
-                    'code1': compare.phash(),
+                    'code1': compare.basehash(),
                     'code2': compare.mse(),
                     'code3': compare.perceptualHash(),
                     'code4': compare.colorCompare(),
@@ -170,17 +187,10 @@ class DemoUploadSearchColorHandler(tornado.web.RequestHandler):
         Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
         filename = imgfile['filename'].strip()
         results=[]
-        # print
+
         list=Compare.Image().findSameColor(
             ImageTool.Image().getRgb(tmp_image), True)
-        # list=Compare.Image().find12colorList(
-        #     ImageTool.Image().getRgb(tmp_image), True)
-        # print list
-        # list = sorted(results, key=lambda k: k['score'], reverse=True)
-        # for key,value in rgbList.RgbList:
-        #     print key
-        #     print value
-        #     print Compare.Image.colorCompare()
+
         list = sorted(list, key=lambda k: k['score'])
         self.write(tornado.template.Loader(config.TEMPLATE).load("search_color_result.html").generate(
             origin_img=filename,
