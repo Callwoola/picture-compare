@@ -3,10 +3,8 @@
     <title>just show test image</title>
 </head>
 <body>
+{% include nav.html %}
 
-<header>
-    <a href="search">search</a>
-</header>
 <pre>
 rms = math.sqrt(
 reduce(operator.add, list(map(lambda a, b: (a - b) ** 2, h1, h2)))

@@ -35,7 +35,7 @@ class DemoHandler(tornado.web.RequestHandler):
                 images[i]['code2'] = compare.mse()
                 images[i]['code3'] = compare.perceptualHash()
 
-                images[i]['code4'] = compare.colorCompare()
+                images[i]['code4'] = None
 
                 images[i]['color'] = image.getRgbaString(images[i]['path'])
                 compare.end()
@@ -55,6 +55,7 @@ class DemoSearchHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
 
         self.write(tornado.template.Loader(config.TEMPLATE).load("search.html").generate(
+            name='search image result',
             action='upload_search'
         ))
 
@@ -103,6 +104,7 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
                     'code2': compare.mse(),
                     'code3': compare.perceptualHash(),
                     'code4': compare.colorCompare(),
+                    'color_package':compare.findSameColor(),
                     'code_mix': compare.mixHash(),
                     'color': imagetool.getRgbString(i),
                 })
@@ -113,6 +115,7 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
             results_code1 = sorted(results, key=lambda k: k['code1'])
             results_code2 = sorted(results, key=lambda k: k['code2'])
             results_code3 = sorted(results, key=lambda k: k['code3'])
+            results_code4 = sorted(results, key=lambda k: k['code4'])
             results_mix = sorted(results, key=lambda k: k['code_mix'])
 
             self.write(tornado.template.Loader(config.TEMPLATE).load("search_result.html").generate(
@@ -120,8 +123,68 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
                 results_code1=results_code1,
                 results_code2=results_code2,
                 results_code3=results_code3,
+                results_code4=results_code4,
                 results_mix=results_mix,
             ))
         except Exception, e:
             print e
             self.redirect('search')
+
+
+class DemoSearchColorHandler(tornado.web.RequestHandler):
+    '''
+    search color test demo
+    '''
+    def get(self, *args, **kwargs):
+
+        self.write(tornado.template.Loader(config.TEMPLATE).load("search.html").generate(
+            name='search image color result',
+            action='upload_search_color'
+        ))
+
+
+class DemoUploadSearchColorHandler(tornado.web.RequestHandler):
+    """
+    TODO search test
+    """
+    def post(self):
+        import StringIO
+        from PIL import Image
+        from src.lib import Compare
+        import os
+        from src.lib import Image as ImageTool
+        from src.module import rgbList
+
+        imagetool=ImageTool.Image()
+        compare = Compare.Image()
+        imgfiles = self.request.files['file_img']
+
+        if len(imgfiles) > 1:
+            return self.write("error")
+        imgfile = imgfiles[0]
+
+        filename = imgfile['filename'].strip()
+
+        tmp = config.PROJECT_DIR + "tests/tmp/"
+        tmp_image = tmp + filename
+        Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
+        filename = imgfile['filename'].strip()
+        results=[]
+        # print
+        list=Compare.Image().findSameColor(
+            ImageTool.Image().getRgb(tmp_image), True)
+        # list=Compare.Image().find12colorList(
+        #     ImageTool.Image().getRgb(tmp_image), True)
+        # print list
+        # list = sorted(results, key=lambda k: k['score'], reverse=True)
+        # for key,value in rgbList.RgbList:
+        #     print key
+        #     print value
+        #     print Compare.Image.colorCompare()
+        list = sorted(list, key=lambda k: k['score'])
+        self.write(tornado.template.Loader(config.TEMPLATE).load("search_color_result.html").generate(
+            origin_img=filename,
+            origin_img_rgb=ImageTool.Image().getRgbString(tmp_image),
+            results=list,
+        ))
+        pass

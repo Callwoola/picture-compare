@@ -3,10 +3,24 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from src.controller import demo
-from src.controller import search
-from src import config
+from src import (config,routes)
 
+
+
+
+def check_self():
+    '''
+    check_self config and dependent
+    :return:
+    '''
+    pass
+
+def info(str):
+    '''
+    :param str:
+    :return:
+    '''
+    print str
 
 def config_yaml():
     '''
@@ -18,35 +32,15 @@ def config_yaml():
     for line in yaml_config:
         if hasattr(config,line.upper()):
             setattr(config,line.upper(),yaml_config[line])
-pass
-
-
-def check_self():
-    '''
-    check_self config and dependent
-    :return:
-    '''
     pass
-def info(str):
-    print str
-# settings = {'debug': True}
 config_yaml()
-application = tornado.web.Application([
-    (r"/", demo.DemoHandler),
-    (r"/search", demo.DemoSearchHandler),
-    (r"/upload_search", demo.DemoUploadSearchHandler),
 
-    (r'/img/(.*)', tornado.web.StaticFileHandler, {'path': config.STATIC_DIR}),
-    #(r'/tests/(.*)', tornado.web.StaticFileHandler, {'path': config.PROJECT_DIR+'/t}),
-
-
-
-    #---------------------------------------------
-    (r'/_search/json/(.*)', search.JsonHandler),
-])
+route=routes.getRoutes(config)
+application = tornado.web.Application(route)
 
 if __name__ == "__main__":
-
+    # settings = {'debug': True}
+    check_self()
     info('config successful ... ')
     application.listen(8888)
     application.debug = True

@@ -1,7 +1,7 @@
 name: Picture Compare
-template: src/template
+template: D:/code/image/src/template
 image_package: [img1, img2, img3 ,img4]
 database: None
-project_dir: /
+project_dir:  D:/code/image/
 static_dir: img/
 TEST_COMPARE_IMG: 1.jpg
