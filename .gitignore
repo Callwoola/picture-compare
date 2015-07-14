@@ -284,3 +284,5 @@ vendor/
 ### python ###
 *.pyc
 tests/tmp/*
+### docs ###
+/docs/build/*
