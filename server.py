@@ -3,26 +3,9 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from src.controller import demo
-from src.controller import search
+from src import (config,routes)
+import os
 
-PROJECT_DIR = "D:/code/image/"
-STATIC_DIR = "img/"
-PROJECT_DIR_IMG = PROJECT_DIR + "img/"
-
-
-def config_yaml():
-    '''
-    config the App value
-    :return:
-    '''
-    import yaml
-    from src import config
-    yaml_config=yaml.load(open("./config.yaml"))
-    for line in yaml_config:
-        if hasattr(config,line.upper()):
-            setattr(config,line.upper(),yaml_config[line])
-pass
 
 
 def check_self():
@@ -31,27 +14,36 @@ def check_self():
     :return:
     '''
     pass
+
 def info(str):
+    '''
+    :param str:
+    :return:
+    '''
     print str
-# settings = {'debug': True}
-application = tornado.web.Application([
-    (r"/", demo.DemoHandler),
-    (r"/search", demo.DemoSearchHandler),
-    (r"/upload_search", demo.DemoUploadSearchHandler),
 
-    (r'/img/(.*)', tornado.web.StaticFileHandler, {'path': PROJECT_DIR_IMG}),
-    (r'/tests/(.*)', tornado.web.StaticFileHandler, {'path': PROJECT_DIR+'/tests'}),
+def config_yaml():
+    '''
+    config the App value
+    :return:
+    '''
+    import yaml
+    yaml_config=yaml.load(open("./config.yaml"))
+    for key in yaml_config.keys():
+        # os.environ[key.upper()]=yaml_config[key]
+        if not os.environ.has_key(key.upper()):
+            os.environ[key.upper()]=str(yaml_config[key])
+    pass
+config_yaml()
 
-
-
-    #---------------------------------------------
-    (r'/_search/json/(.*)', search.JsonHandler),
-])
+route=routes.getRoutes(config)
+application = tornado.web.Application(route)
 
 if __name__ == "__main__":
-    config_yaml()
+    # settings = {'debug': True}
+    check_self()
     info('config successful ... ')
-    application.listen(8888)
+    application.listen(os.environ[config.PROJECT_PORT])
     application.debug = True
     # application.autoreload=False
     info('Picture-Compare service runing ...')

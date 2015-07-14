@@ -13,6 +13,10 @@ class Image:
     # @:return str
     # ----------------------------------------------------------
     def getRgbaString(self,path):
+        '''
+        :param path:
+        :return:
+        '''
         r, g, b, a = im.open(path).convert('RGBA').resize((1, 1)).getcolors()[0][1]
         return "rgba(%d, %d, %d, %d)" % (r, g, b, a)
     pass
@@ -22,6 +26,10 @@ class Image:
     # @:return
     # ----------------------------------------------------------
     def getRgba(self,path):
+        '''
+        :param path:
+        :return:
+        '''
         r, g, b, a = im.open(path).convert('RGBA').resize((1, 1)).getcolors()[0][1]
         return (r, g, b, a)
     pass
@@ -31,6 +39,10 @@ class Image:
     # @:return str
     # ----------------------------------------------------------
     def getRgbString(self,path):
+        '''
+        :param path:
+        :return:
+        '''
         r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
         return "rgb(%d, %d, %d)" % (r, g, b)
     pass
@@ -40,6 +52,10 @@ class Image:
     # @:return
     # ----------------------------------------------------------
     def getRgb(self,path):
+        '''
+        :param path:
+        :return:
+        '''
         r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
         return (r, g, b)
     pass

@@ -17,9 +17,7 @@ class Manage:
         import os
 
         imgList = []
-        print project_img_path
         for dir_, _, files in os.walk(project_img_path):
-            print files
             for fileName in files:
                 imgList.append({"url": package_path + fileName,
                                 "path": project_img_path + fileName,
@@ -35,6 +33,7 @@ class Manage:
         :return:
         '''
         import os
+
         for dir_, _, files in os.walk(project_img_path):
             for fileName in files:
                 return fileName
@@ -55,3 +54,101 @@ class Manage:
         for i in glob.glob('*'):
             pathList.append(os.getcwd() + "/" + i)
         return pathList
+
+
+    def add_index_file(self,json,data):
+        # if data ta
+        pass
+
+    # ----------------------------------------------------------
+    # return Tinydb all list
+    # ---------------------------------------------------------
+    def get_db_list(self, PATH=None):
+        '''
+        :param PATH:
+        :return:
+        '''
+        the_list = []
+        the_list.append(
+            {
+                'name': 'the1',
+                'addresses': 'http://localhost:8888/img/img1/1.jpg',
+                'id': 'the1',
+                'type': 'url',
+                'map': 'D:/code/image/img/img1/1.jpg',
+            }
+        )
+        the_list.append(
+            {
+                'name': 'the1',
+                'addresses': 'http://localhost:8888/img/img1/2.jpg',
+                'id': 'the2',
+                'type': 'url',
+                'map': 'D:/code/image/img/img1/2.jpg',
+            }
+        )
+        the_list.append(
+            {
+                'name': 'the1',
+                'addresses': 'http://localhost:8888/img/img1/3.jpg',
+                'id': 'the3',
+                'type': 'url',
+                'map': 'D:/code/image/img/img1/3.jpg',
+            }
+        )
+        the_list.append(
+            {
+                'name': 'the1',
+                'addresses': 'http://localhost:8888/img/img1/4.jpg',
+                'id': 'the4',
+                'type': 'url',
+                'map': 'D:/code/image/img/img1/4.jpg',
+            }
+        )
+        the_list.append(
+            {
+                'name': 'the1',
+                'addresses': 'http://localhost:8888/img/img1/5.jpg',
+                'id': 'the5',
+                'type': 'url',
+                'map': 'D:/code/image/img/img1/5.jpg',
+            }
+        )
+        the_list.append(
+            {
+                'name': 'the1',
+                'addresses': 'http://localhost:8888/img/img1/6.jpg',
+                'id': 'the6',
+                'type': 'url',
+                'map': 'D:/code/image/img/img1/6.jpg',
+            }
+        )
+        the_list.append(
+            {
+                'name': 'the1',
+                'addresses': 'http://localhost:8888/img/img1/7.jpg',
+                'id': 'the7',
+                'type': 'url',
+                'map': 'D:/code/image/img/img1/7.jpg',
+            }
+        )
+        the_list.append(
+            {
+                'name': 'the1',
+                'addresses': 'http://localhost:8888/img/img1/8.jpg',
+                'id': 'the8',
+                'type': 'url',
+                'map': 'D:/code/image/img/img1/8.jpg',
+            }
+        )
+        the_list.append(
+            {
+                'name': 'the1',
+                'addresses': 'http://localhost:8888/img/img1/9.jpg',
+                'id': 'the9',
+                'type': 'url',
+                'map': 'D:/code/image/img/img1/9.jpg',
+            }
+        )
+        return the_list
+        # import json

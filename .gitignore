@@ -284,3 +284,9 @@ vendor/
 ### python ###
 *.pyc
 tests/tmp/*
+### docs ###
+/docs/build/*
+
+/indexdb
+/img/tmp/*
+!/img/tmp/.gitkeep

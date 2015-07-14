@@ -1,0 +1,22 @@
+<html>
+<head>
+    <title>search file</title>
+</head>
+<body>
+<h3>code2</h3>
+<ul>
+    {% for result in results %}
+    <li>
+        <img style="width:60px;height:60px;" src="tests/tmp/{{ origin_img }}"/>
+        <img style="width:60px;height:60px;background-color:{{ origin_img_rgb }}">
+        <img style="width:60px;height:60px;background-color:{{result['rgb']}}">
+        <span>{{ origin_img_rgb }}</span> //
+        <span>{{result['rgb']}}</span> //
+        <span>{{result['score']}}</span> //
+        <span>{{result['keyname']}}</span> //
+    </li>
+    {% end %}
+</ul>
+
+</body>
+</html>
