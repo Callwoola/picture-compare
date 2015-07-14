@@ -28,6 +28,7 @@ class json_module(baseModule):
         '''
         if type(param) in (str,list,dict):
             self.data[key]=param
+        return self
         pass
     def add(self,key,param):
         self.data[key].append(param)

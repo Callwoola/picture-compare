@@ -16,7 +16,6 @@ class pcHandler(tornado.web.RequestHandler):
         # db.pcDB
         self.set_header('Content-Type', 'application/json')
         jsonM=json_module.json_module()
-        jsonM.set('status','OK')
         jsonM.set('data',[
             {'material':{
                 'id':12
@@ -24,12 +23,17 @@ class pcHandler(tornado.web.RequestHandler):
             {'material':"123123"},
             {'material':"123123"}
         ])
+        jsonM.set('status','OK')
         if self.get_argument("type") in ("json","path","url"):
             def getAll():
                 return []
             self.write(jsonM.get())
             return
-        self.write('{error:404}')
+        self.write(jsonM.set('status','error').get())
+
+    def post(self,type):
+
+        pass
 
 
 # class JsonHandler(tornado.web.RequestHandler):
