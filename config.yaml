@@ -4,4 +4,5 @@ image_package: [img1, img2, img3 ,img4]
 database: None
 project_dir:  D:/code/image/
 static_dir: img/
-TEST_COMPARE_IMG: 1.jpg
+test_compare_img: 1.jpg
+project_port: 8888

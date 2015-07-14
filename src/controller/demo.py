@@ -7,21 +7,21 @@ from src.lib import Image
 from src.lib import Manage
 from src.lib import Compare
 from src import config
-
+import os
 
 
 class HomeHandler(tornado.web.RequestHandler):
     def get(self):
         self.write(tornado.template
-                   .Loader(config.TEMPLATE)
+                   .Loader(os.environ[config.TEMPLATE])
                    .load("index.html")
                    .generate())
 
 class DemoHandler(tornado.web.RequestHandler):
     def get(self):
         import os
-        os.chdir(config.PROJECT_DIR)
-        loader = tornado.template.Loader(config.TEMPLATE)
+        os.chdir(os.environ[config.PROJECT_DIR])
+        loader = tornado.template.Loader(os.environ[config.TEMPLATE])
         image = Image.Image()
         compare = Compare.Image()
         packages = ["img1/", "img2/", "img4/"]
@@ -31,14 +31,14 @@ class DemoHandler(tornado.web.RequestHandler):
             # --------------------------
             # get differ image package
             # package = "img1/"
-            images = manage.getImageList(config.STATIC_DIR + package, config.STATIC_DIR + package)
-            COMPARE_IMG = manage.getFirst(config.STATIC_DIR + package)
+            images = manage.getImageList(os.environ[config.STATIC_DIR] + package, os.environ[config.STATIC_DIR] + package)
+            COMPARE_IMG = manage.getFirst(os.environ[config.STATIC_DIR] + package)
 
             for i in range(0, len(images)):
-                compare.setA(config.STATIC_DIR + package + COMPARE_IMG)
+                compare.setA(os.environ[config.STATIC_DIR] + package + COMPARE_IMG)
                 compare.setB(images[i]['path'])
 
-                images[i]['origin_img'] = config.STATIC_DIR + package + COMPARE_IMG
+                images[i]['origin_img'] = os.environ[config.STATIC_DIR] + package + COMPARE_IMG
 
                 compare.start()
                 images[i]['code'] = compare.basehash()
@@ -56,7 +56,7 @@ class DemoHandler(tornado.web.RequestHandler):
             .generate(images=images,
                       packages=packages,
                       package_image=package_image,
-                      COMPARE_IMG=config.STATIC_DIR + config.TEST_COMPARE_IMG
+                      COMPARE_IMG=os.environ[config.STATIC_DIR] + os.environ[config.TEST_COMPARE_IMG]
                       )
         self.write(html)
 
@@ -64,7 +64,7 @@ class DemoHandler(tornado.web.RequestHandler):
 class DemoSearchHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
 
-        self.write(tornado.template.Loader(config.TEMPLATE).load("search.html").generate(
+        self.write(tornado.template.Loader(os.environ[config.TEMPLATE]).load("search.html").generate(
             name='search image result',
             action='upload_search'
         ))
@@ -84,7 +84,7 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
         from src.lib import Image as ImageTool
         import glob
         try:
-            os.chdir(config.PROJECT_DIR + "tests/tmp/")
+            os.chdir(os.environ[config.PROJECT_DIR] + "tests/tmp/")
             for i in glob.glob('*'):
                 if '.py' not in i:
                     os.remove(i)
@@ -97,12 +97,12 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
             imgfile = imgfiles[0]
             filename = imgfile['filename'].strip()
 
-            tmp = config.PROJECT_DIR + "tests/tmp/"
+            tmp = os.environ[config.PROJECT_DIR] + "tests/tmp/"
 
             tmp_image = tmp + filename
             Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
 
-            path = config.PROJECT_DIR + "tests/img/"
+            path = os.environ[config.PROJECT_DIR] + "tests/img/"
             # start compare imgs
             manage = Manage.Manage()
             results = []
@@ -135,7 +135,7 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
             results_code4 = sorted(results, key=lambda k: k['code4'])
             results_mix = sorted(results, key=lambda k: k['code_mix'])
 
-            self.write(tornado.template.Loader(config.TEMPLATE).load("search_result.html").generate(
+            self.write(tornado.template.Loader(os.environ[config.TEMPLATE]).load("search_result.html").generate(
                 origin_img=filename,
                 results_code1=results_code1,
                 results_code2=results_code2,
@@ -154,7 +154,7 @@ class DemoSearchColorHandler(tornado.web.RequestHandler):
     '''
     def get(self, *args, **kwargs):
 
-        self.write(tornado.template.Loader(config.TEMPLATE).load("search.html").generate(
+        self.write(tornado.template.Loader(os.environ[config.TEMPLATE]).load("search.html").generate(
             name='search image color result',
             action='upload_search_color'
         ))
@@ -182,7 +182,7 @@ class DemoUploadSearchColorHandler(tornado.web.RequestHandler):
 
         filename = imgfile['filename'].strip()
 
-        tmp = config.PROJECT_DIR + "tests/tmp/"
+        tmp = os.environ[config.PROJECT_DIR] + "tests/tmp/"
         tmp_image = tmp + filename
         Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
         filename = imgfile['filename'].strip()
@@ -192,7 +192,7 @@ class DemoUploadSearchColorHandler(tornado.web.RequestHandler):
             ImageTool.Image().getRgb(tmp_image), True)
 
         list = sorted(list, key=lambda k: k['score'])
-        self.write(tornado.template.Loader(config.TEMPLATE).load("search_color_result.html").generate(
+        self.write(tornado.template.Loader(os.environ[config.TEMPLATE]).load("search_color_result.html").generate(
             origin_img=filename,
             origin_img_rgb=ImageTool.Image().getRgbString(tmp_image),
             results=list,

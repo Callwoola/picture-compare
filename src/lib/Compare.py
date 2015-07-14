@@ -11,6 +11,9 @@ class Image:
     value_of_mse = None
     value_of_perceptualHash = None
 
+    image_a_binary = None
+    image_b_binary = None
+
     def __init__(self, A=None, B=None):
         # image A is String of path
         # image B is String of path
@@ -18,11 +21,29 @@ class Image:
 
     def setA(self, path):
         self.image_b_path = path
+
     pass
 
     def setB(self, path):
         self.image_a_path = path
+
     pass
+
+    def set_a_source(self, data):
+        ''' set a binary variable
+        :param data:
+        :return:
+        '''
+        self.image_a_binary = data
+        return self
+
+    def set_b_source(self, data):
+        ''' set a binary variable
+        :param data:
+        :return:
+        '''
+        self.image_b_binary = data
+        return self
 
     def start(self):
         import os
@@ -50,16 +71,18 @@ class Image:
     # return the MSE, the lower the error, the more "similar"
     # NOTE: the two images must have the same dimension
     # ----------------------------------------------------------
-    def mse(self):
+    def mse(self,path=True):
         """
         :return: float
         """
         import numpy as np
         import cv2
-
-        imageA = cv2.imread(self.image_a_path)
-        imageB = cv2.imread(self.image_b_path)
-
+        if path:
+            imageA = cv2.imread(self.image_a_path)
+            imageB = cv2.imread(self.image_b_path)
+        else:
+            imageA = cv2.imread(self.image_a_binary)
+            imageB = cv2.imread(self.image_b_binary)
         imageA = cv2.cvtColor(imageA, cv2.COLOR_BGR2GRAY)
         imageB = cv2.cvtColor(imageB, cv2.COLOR_BGR2GRAY)
 
@@ -75,7 +98,7 @@ class Image:
     # return the MSE, the lower the error, the more "similar"
     # NOTE: the two images must have the same dimension
     # ----------------------------------------------------------
-    def basehash(self):
+    def basehash(self,path=True):
         """basehash compare If histogram smooth
         :return: float
         """
@@ -83,9 +106,17 @@ class Image:
         import operator
         from PIL import Image
 
-        image1 = Image.open(self.image_a_path)
-        image2 = Image.open(self.image_b_path)
+        if path:
+            image1 = Image.open(self.image_a_path)
+            image2 = Image.open(self.image_b_path)
+        else:
+            image1 = Image.open(self.image_a_binary)
+            image2 = Image.open(self.image_b_binary)
 
+
+        if not image1.size is image2.size:
+            image2=image2.resize(image1.size)
+        pass
         h1 = image1.convert('RGB').histogram()
         h2 = image2.convert('RGB').histogram()
 
@@ -125,7 +156,7 @@ class Image:
     # perceptual Hash
     # very quick 8 x 8
     # ----------------------------------------------------------
-    def perceptualHash(self):
+    def perceptualHash(self,path=True):
         '''
         huhh...
         '''
@@ -184,14 +215,16 @@ class Image:
         :return:
         '''
         from PIL import Image as im
+
         def getRgb(path):
             r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
             return [r, g, b]
+
         if RGB_A is None and RGB_B is None:
             RGB_A = getRgb(self.image_a_path)
             RGB_B = getRgb(self.image_b_path)
-        if len(RGB_A)==3 and len(RGB_B)==3:
-            score= (RGB_A[0] - RGB_B[0]) ** 2 + (RGB_A[1] - RGB_B[1]) ** 2 + (RGB_A[2] - RGB_B[2]) ** 2
+        if len(RGB_A) == 3 and len(RGB_B) == 3:
+            score = (RGB_A[0] - RGB_B[0]) ** 2 + (RGB_A[1] - RGB_B[1]) ** 2 + (RGB_A[2] - RGB_B[2]) ** 2
             return abs(score)
         return False
 
@@ -259,7 +292,7 @@ class Image:
             # print  abs(score)
             return abs(score)
 
-        for k,v in rgb12List.iteritems():
+        for k, v in rgb12List.iteritems():
             theList.append({
                 'score': score(origin_Rgb, v),
                 'keyname': k,
@@ -286,6 +319,7 @@ class Image:
         def getRgb(path):
             r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
             return [r, g, b]
+
         #
         # RGB_A = getRgb(self.image_a_path)
         # RGB_B = getRgb(self.image_b_path)

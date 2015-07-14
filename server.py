@@ -4,7 +4,7 @@ import tornado.ioloop
 import tornado.web
 import tornado.template
 from src import (config,routes)
-
+import os
 
 
 
@@ -29,9 +29,10 @@ def config_yaml():
     '''
     import yaml
     yaml_config=yaml.load(open("./config.yaml"))
-    for line in yaml_config:
-        if hasattr(config,line.upper()):
-            setattr(config,line.upper(),yaml_config[line])
+    for key in yaml_config.keys():
+        # os.environ[key.upper()]=yaml_config[key]
+        if not os.environ.has_key(key.upper()):
+            os.environ[key.upper()]=str(yaml_config[key])
     pass
 config_yaml()
 
@@ -42,7 +43,7 @@ if __name__ == "__main__":
     # settings = {'debug': True}
     check_self()
     info('config successful ... ')
-    application.listen(8888)
+    application.listen(os.environ[config.PROJECT_PORT])
     application.debug = True
     # application.autoreload=False
     info('Picture-Compare service runing ...')
