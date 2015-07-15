@@ -3,11 +3,15 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from src.controller import (search,demo,compare,upload)
+from src.controller import (search,demo,compare,upload,bindex)
 import os
 
 def getRoutes(config):
     Routes = [
+
+        # ---------------------------------------------
+        # demo url
+        # ---------------------------------------------
         (r"/", demo.HomeHandler),
         (r"/demo", demo.DemoHandler),
         (r"/search", demo.DemoSearchHandler),
@@ -25,18 +29,10 @@ def getRoutes(config):
         # supply restful api  just like elasticsearch
         # ---------------------------------------------
         (r'/_search/json/(.*)', search.JsonHandler),
-
-
-
-        (r'/pc(.*)',compare.pcHandler),
-        (r'/upload(.*)',upload.UploadHandler),
-        # (r'/pc/(.*)',compare.pcHandler),
-        # (r'/color(.*)',compare.pcHandler),
-        # (r'/index(.*)',compare.pcHandler),
-
-        # 色彩接口 /color?path1=*
-        # 推荐接口 /recommend?path1=*
-        # 重建索引 /reindex?type=*
+        (r'/_pc(.*)',compare.pcHandler),
+        (r'/_upload(.*)',upload.UploadHandler),
+        # (r'/_color(.*)',compare.pcHandler),
+        (r'/_index(.*)',bindex.BuildIndexHandler),
     ]
 
     return Routes

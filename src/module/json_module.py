@@ -8,7 +8,6 @@ class baseModule(object):
     def __init__(self):
         print 'base module'
         pass
-
     pass
 
 
@@ -39,7 +38,6 @@ class json_module(baseModule):
             if key is 'data':
                 self.data[key] = param
         return self
-        pass
 
     def setStatus(self, key, param):
         '''
@@ -51,7 +49,6 @@ class json_module(baseModule):
             if key is 'status':
                 self.data[key] = param
         return self
-        pass
 
     def set(self, key, param):
         '''
@@ -75,8 +72,4 @@ class json_module(baseModule):
         '''
         :return:
         '''
-        print self.data
         return json.dumps(self.data)
-        # return io.getvalue()
-        # return json
-        # pass

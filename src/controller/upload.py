@@ -16,7 +16,6 @@ class UploadHandler(tornado.web.RequestHandler):
     """
     RESTFUL api style
     """
-
     def post(self, type=None):
         # -------------------------------------
         # first to get Image file and save
@@ -24,7 +23,6 @@ class UploadHandler(tornado.web.RequestHandler):
 
         self.set_header('Content-Type', 'application/json')
         jsonM = json_module.json_module()
-
 
         imgfiles = self.request.files['file_img']
         if len(imgfiles) > 1:
@@ -44,7 +42,7 @@ class UploadHandler(tornado.web.RequestHandler):
         tmp_image = tmp + filename
         # -------------------------------
         # all file storage in img/tmp/
-        ''' save filename as tmpfile '''
+        # save filename as tmpfile
         Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
         image_url = os.environ[config.SERVER_URL] + '/img/tmp/' + filename
         type = self.get_argument("type")
