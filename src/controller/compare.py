@@ -65,7 +65,8 @@ class pcHandler(tornado.web.RequestHandler):
                     ''' there is processing img and return img list '''
                     from src.service.compare import Compare
                     compareDict = Compare().setCompareImage(tmp_name)
-
+                    print '---'
+                    print compareDict
                     self.write(jsonM
                                .set('status', 'OK')
                                .set('data', compareDict)

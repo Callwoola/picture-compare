@@ -29,7 +29,7 @@ def getRoutes(config):
 
 
         (r'/pc(.*)',compare.pcHandler),
-        (r'/upload(.*)',upload.uploadHandler),
+        (r'/upload(.*)',upload.UploadHandler),
         # (r'/pc/(.*)',compare.pcHandler),
         # (r'/color(.*)',compare.pcHandler),
         # (r'/index(.*)',compare.pcHandler),

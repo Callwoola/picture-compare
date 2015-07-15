@@ -6,3 +6,4 @@ project_dir:  D:/code/image/
 static_dir: img/
 test_compare_img: 1.jpg
 project_port: 8888
+server_url: http://localhost:8888
