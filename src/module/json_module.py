@@ -4,7 +4,6 @@ import json
 from StringIO import StringIO
 
 
-
 class baseModule(object):
     def __init__(self):
         print 'base module'
@@ -19,6 +18,7 @@ class json_module(baseModule):
     status is a str
     data was dict
     '''
+
     def __init__(self):
         self.data = {}
 
@@ -38,7 +38,6 @@ class json_module(baseModule):
             if key is 'data':
                 self.data[key] = param
         return self
-        pass
 
     def setStatus(self, key, param):
         '''
@@ -50,7 +49,6 @@ class json_module(baseModule):
             if key is 'status':
                 self.data[key] = param
         return self
-        pass
 
     def set(self, key, param):
         '''
@@ -61,7 +59,6 @@ class json_module(baseModule):
         if type(param) in (str, list, dict):
             self.data[key] = param
         return self
-        pass
 
     def add(self, key, param):
         '''
@@ -75,8 +72,4 @@ class json_module(baseModule):
         '''
         :return:
         '''
-        print self.data
         return json.dumps(self.data)
-        # return io.getvalue()
-        # return json
-        # pass

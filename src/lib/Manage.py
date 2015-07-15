@@ -1,5 +1,9 @@
 # coding:utf-8
 
+from tinydb import TinyDB
+from src import config
+import os
+
 
 class Manage:
     def __init__(self):
@@ -55,8 +59,7 @@ class Manage:
             pathList.append(os.getcwd() + "/" + i)
         return pathList
 
-
-    def add_index_file(self,json,data):
+    def add_index_file(self, json, data):
         # if data ta
         pass
 
@@ -68,87 +71,93 @@ class Manage:
         :param PATH:
         :return:
         '''
-        the_list = []
-        the_list.append(
-            {
-                'name': 'the1',
-                'addresses': 'http://localhost:8888/img/img1/1.jpg',
-                'id': 'the1',
-                'type': 'url',
-                'map': 'D:/code/image/img/img1/1.jpg',
-            }
-        )
-        the_list.append(
-            {
-                'name': 'the1',
-                'addresses': 'http://localhost:8888/img/img1/2.jpg',
-                'id': 'the2',
-                'type': 'url',
-                'map': 'D:/code/image/img/img1/2.jpg',
-            }
-        )
-        the_list.append(
-            {
-                'name': 'the1',
-                'addresses': 'http://localhost:8888/img/img1/3.jpg',
-                'id': 'the3',
-                'type': 'url',
-                'map': 'D:/code/image/img/img1/3.jpg',
-            }
-        )
-        the_list.append(
-            {
-                'name': 'the1',
-                'addresses': 'http://localhost:8888/img/img1/4.jpg',
-                'id': 'the4',
-                'type': 'url',
-                'map': 'D:/code/image/img/img1/4.jpg',
-            }
-        )
-        the_list.append(
-            {
-                'name': 'the1',
-                'addresses': 'http://localhost:8888/img/img1/5.jpg',
-                'id': 'the5',
-                'type': 'url',
-                'map': 'D:/code/image/img/img1/5.jpg',
-            }
-        )
-        the_list.append(
-            {
-                'name': 'the1',
-                'addresses': 'http://localhost:8888/img/img1/6.jpg',
-                'id': 'the6',
-                'type': 'url',
-                'map': 'D:/code/image/img/img1/6.jpg',
-            }
-        )
-        the_list.append(
-            {
-                'name': 'the1',
-                'addresses': 'http://localhost:8888/img/img1/7.jpg',
-                'id': 'the7',
-                'type': 'url',
-                'map': 'D:/code/image/img/img1/7.jpg',
-            }
-        )
-        the_list.append(
-            {
-                'name': 'the1',
-                'addresses': 'http://localhost:8888/img/img1/8.jpg',
-                'id': 'the8',
-                'type': 'url',
-                'map': 'D:/code/image/img/img1/8.jpg',
-            }
-        )
-        the_list.append(
-            {
-                'name': 'the1',
-                'addresses': 'http://localhost:8888/img/img1/9.jpg',
-                'id': 'the9',
-                'type': 'url',
-                'map': 'D:/code/image/img/img1/9.jpg',
-            }
-        )
-        return the_list
-        # import json
+        db = TinyDB(os.environ[config.STORAGE_INDEX_DB])
+        list = db.all()
+        results = []
+        for i in list:
+            results.append(
+                {
+                    'name': i['data']['name'],
+                    'map': i['data']['map'],
+                    'selfid': i['id'],
+                    'id': i['data']['id'],
+                    'addresses': i['data']['url'],
+                    'type': 'url',
+                }
+            )
+        return results
+        #
+        # the_list.append(
+        #     {
+        #         'name': 'the1',
+        #         'addresses': 'http://localhost:8888/img/img1/2.jpg',
+        #         'id': 'the2',
+        #         'type': 'url',
+        #         'map': 'D:/code/image/img/img1/2.jpg',
+        #     }
+        # )
+        # the_list.append(
+        #     {
+        #         'name': 'the1',
+        #         'addresses': 'http://localhost:8888/img/img1/3.jpg',
+        #         'id': 'the3',
+        #         'type': 'url',
+        #         'map': 'D:/code/image/img/img1/3.jpg',
+        #     }
+        # )
+        # the_list.append(
+        #     {
+        #         'name': 'the1',
+        #         'addresses': 'http://localhost:8888/img/img1/4.jpg',
+        #         'id': 'the4',
+        #         'type': 'url',
+        #         'map': 'D:/code/image/img/img1/4.jpg',
+        #     }
+        # )
+        # the_list.append(
+        #     {
+        #         'name': 'the1',
+        #         'addresses': 'http://localhost:8888/img/img1/5.jpg',
+        #         'id': 'the5',
+        #         'type': 'url',
+        #         'map': 'D:/code/image/img/img1/5.jpg',
+        #     }
+        # )
+        # the_list.append(
+        #     {
+        #         'name': 'the1',
+        #         'addresses': 'http://localhost:8888/img/img1/6.jpg',
+        #         'id': 'the6',
+        #         'type': 'url',
+        #         'map': 'D:/code/image/img/img1/6.jpg',
+        #     }
+        # )
+        # the_list.append(
+        #     {
+        #         'name': 'the1',
+        #         'addresses': 'http://localhost:8888/img/img1/7.jpg',
+        #         'id': 'the7',
+        #         'type': 'url',
+        #         'map': 'D:/code/image/img/img1/7.jpg',
+        #     }
+        # )
+        # the_list.append(
+        #     {
+        #         'name': 'the1',
+        #         'addresses': 'http://localhost:8888/img/img1/8.jpg',
+        #         'id': 'the8',
+        #         'type': 'url',
+        #         'map': 'D:/code/image/img/img1/8.jpg',
+        #     }
+        # )
+        # the_list.append(
+        #     {
+        #         'name': 'the1',
+        #         'addresses': 'http://localhost:8888/img/img1/9.jpg',
+        #         'id': 'the9',
+        #         'type': 'url',
+        #         'map': 'D:/code/image/img/img1/9.jpg',
+        #     }
+        # )
+        # return the_list
+        # # import json

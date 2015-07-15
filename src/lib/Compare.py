@@ -21,7 +21,6 @@ class Image:
 
     def setA(self, path):
         self.image_b_path = path
-
     pass
 
     def setB(self, path):
