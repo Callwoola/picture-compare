@@ -56,7 +56,8 @@ class pcHandler(tornado.web.RequestHandler):
                     ret = urllib2.urlopen(jsondata['query']['url']).read()
                     m = hashlib.md5()
                     m.update(str(time.time()))
-                    tmp_name = os.environ[config.PROJECT_DIR] + 'img/tmp/' + m.hexdigest() + '.png'
+                    section_list=jsondata['query']['url'].split('.')
+                    tmp_name = os.environ[config.PROJECT_DIR] + 'img/tmp/' + m.hexdigest() + section_list[-1]
                     output = open(tmp_name, 'wb')
                     output.write(ret)
                     output.close()

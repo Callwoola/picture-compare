@@ -290,3 +290,6 @@ tests/tmp/*
 /indexdb
 /img/tmp/*
 !/img/tmp/.gitkeep
+/img/storage/*
+!/img/storage/.gitkeep
+*.db
