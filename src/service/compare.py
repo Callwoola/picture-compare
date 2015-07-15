@@ -18,7 +18,7 @@ class Compare:
     def __init__(self):
         pass
 
-    def setCompareImage(self, path=None, sort="score_basehash"):
+    def setCompareImage(self, path=None, sort="score"):
         '''
         :param data:
         :return: list | None
@@ -36,7 +36,7 @@ class Compare:
             compare = compareTool.Image()
             results = []
             for bean in the_list:
-                print bean['addresses']
+
                 # --------------------------
                 # this is a image buay file
                 compare.setA(path)
@@ -44,12 +44,14 @@ class Compare:
                     compare.setB(bean['map'])
                 else:
                     compare.setB(bean['addresses'])
+
                 results.append({
-                    'score_basehash': compare.basehash(),
+                    # 'score_basehash': compare.basehash(),
+                    'score': compare.basehash(),
                     # 'score_image': compare.mse(),
+                    'url': '' if bean['type'] != 'url' else bean['addresses'],
                     'id': bean['id'],
                 })
-            print results
             return sorted(results, key=lambda k: k[sort])
         except Exception, e:
             print e
