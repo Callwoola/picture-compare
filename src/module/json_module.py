@@ -4,11 +4,11 @@ import json
 from StringIO import StringIO
 
 
-
 class baseModule(object):
     def __init__(self):
         print 'base module'
         pass
+
     pass
 
 
@@ -19,6 +19,7 @@ class json_module(baseModule):
     status is a str
     data was dict
     '''
+
     def __init__(self):
         self.data = {}
 

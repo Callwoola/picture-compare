@@ -3,7 +3,7 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from src.controller import (search,demo,compare)
+from src.controller import (search,demo,compare,upload)
 import os
 
 def getRoutes(config):
@@ -29,6 +29,7 @@ def getRoutes(config):
 
 
         (r'/pc(.*)',compare.pcHandler),
+        (r'/upload(.*)',upload.uploadHandler),
         # (r'/pc/(.*)',compare.pcHandler),
         # (r'/color(.*)',compare.pcHandler),
         # (r'/index(.*)',compare.pcHandler),
