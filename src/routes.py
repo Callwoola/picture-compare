@@ -3,7 +3,7 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from src.controller import (search,demo,compare,upload,bindex)
+from src.controller import (search,demo,compare,upload,bindex,urltool)
 import os
 
 def getRoutes(config):
@@ -33,6 +33,9 @@ def getRoutes(config):
         (r'/_upload(.*)',upload.UploadHandler),
         # (r'/_color(.*)',compare.pcHandler),
         (r'/_index(.*)',bindex.BuildIndexHandler),
+
+
+        (r'/crossdomain.xml',urltool.urltoolHandler)
     ]
 
     return Routes

@@ -30,6 +30,7 @@ class UploadHandler(tornado.web.RequestHandler):
                                                     .setStatus('status', 'error')
                                                     .set('msg', 'file error')
                                                     .get())
+        print imgfiles
         imgfile = imgfiles[0]
         filename = imgfile['filename'].strip()
         filenname, ext = filename.split('.')
@@ -46,7 +47,7 @@ class UploadHandler(tornado.web.RequestHandler):
         Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
         image_url = os.environ[config.SERVER_URL] + '/img/tmp/' + filename
         type = self.get_argument("type")
-        if type in ("doc", "image"):
+        if type in ("doc", "image","data"):
             return self.write(jsonM.setStatus('status', 'OK')
                               .set('url', str(image_url))
                               .set('hash', hash)
