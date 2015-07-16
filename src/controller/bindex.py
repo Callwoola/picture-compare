@@ -9,7 +9,7 @@ from src.module import json_module
 import hashlib
 from src import config
 
-from tornado import queues
+# from tornado import queues
 from tornado import gen
 
 from tinydb import TinyDB, where
