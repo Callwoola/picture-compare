@@ -38,3 +38,10 @@ http://localhost:6666/_pc?type=json
         "url" : "https://www.baidu.com/img/bd_logo1.png"
     }
 }
+
+upload
+http://192.168.1.106:8888/_upload?type=data
+{
+    name : file_img
+    body :data
+}

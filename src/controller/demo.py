@@ -1,4 +1,4 @@
-#coding:utf-8
+# coding:utf-8
 import tornado
 import tornado.ioloop
 import tornado.web
@@ -13,13 +13,15 @@ import os
 class HomeHandler(tornado.web.RequestHandler):
     def get(self):
         self.write(tornado.template
-                   .Loader(os.environ[config.TEMPLATE])
-                   .load("index.html")
-                   .generate())
+            .Loader(os.environ[config.TEMPLATE])
+            .load("index.html")
+            .generate())
+
 
 class DemoHandler(tornado.web.RequestHandler):
     def get(self):
         import os
+
         os.chdir(os.environ[config.PROJECT_DIR])
         loader = tornado.template.Loader(os.environ[config.TEMPLATE])
         image = Image.Image()
@@ -31,7 +33,8 @@ class DemoHandler(tornado.web.RequestHandler):
             # --------------------------
             # get differ image package
             # package = "img1/"
-            images = manage.getImageList(os.environ[config.STATIC_DIR] + package, os.environ[config.STATIC_DIR] + package)
+            images = manage.getImageList(os.environ[config.STATIC_DIR] + package,
+                                         os.environ[config.STATIC_DIR] + package)
             COMPARE_IMG = manage.getFirst(os.environ[config.STATIC_DIR] + package)
 
             for i in range(0, len(images)):
@@ -63,18 +66,17 @@ class DemoHandler(tornado.web.RequestHandler):
 
 class DemoSearchHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
-
         self.write(tornado.template.Loader(os.environ[config.TEMPLATE]).load("search.html").generate(
             name='search image result',
             action='upload_search'
         ))
 
 
-
 class DemoUploadSearchHandler(tornado.web.RequestHandler):
     """
     TODO search test
     """
+
     def post(self):
         import StringIO
         from PIL import Image
@@ -83,23 +85,27 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
         import os
         from src.lib import Image as ImageTool
         import glob
+
         try:
             os.chdir(os.environ[config.PROJECT_DIR] + "tests/tmp/")
             for i in glob.glob('*'):
                 if '.py' not in i:
                     os.remove(i)
                     pass
-            imagetool=ImageTool.Image()
+            imagetool = ImageTool.Image()
             compare = Compare.Image()
             imgfiles = self.request.files['file_img']
             if len(imgfiles) > 1:
                 return self.write("error")
             imgfile = imgfiles[0]
             filename = imgfile['filename'].strip()
-
+            import uuid
+            filename = str(uuid.uuid4()) + '.' + filename.split('.')[-1]
             tmp = os.environ[config.PROJECT_DIR] + "tests/tmp/"
 
+
             tmp_image = tmp + filename
+            print tmp_image
             Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
 
             path = os.environ[config.PROJECT_DIR] + "tests/img/"
@@ -121,7 +127,7 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
                     'code2': compare.mse(),
                     'code3': compare.perceptualHash(),
                     'code4': compare.colorCompare(),
-                    'color_package':compare.findSameColor(),
+                    'color_package': compare.findSameColor(),
                     'code_mix': compare.mixHash(),
                     'color': imagetool.getRgbString(i),
                 })
@@ -152,8 +158,8 @@ class DemoSearchColorHandler(tornado.web.RequestHandler):
     '''
     search color test demo
     '''
-    def get(self, *args, **kwargs):
 
+    def get(self, *args, **kwargs):
         self.write(tornado.template.Loader(os.environ[config.TEMPLATE]).load("search.html").generate(
             name='search image color result',
             action='upload_search_color'
@@ -164,6 +170,7 @@ class DemoUploadSearchColorHandler(tornado.web.RequestHandler):
     """
     TODO search test
     """
+
     def post(self):
         import StringIO
         from PIL import Image
@@ -172,7 +179,7 @@ class DemoUploadSearchColorHandler(tornado.web.RequestHandler):
         from src.lib import Image as ImageTool
         from src.module import rgbList
 
-        imagetool=ImageTool.Image()
+        imagetool = ImageTool.Image()
         compare = Compare.Image()
         imgfiles = self.request.files['file_img']
 
@@ -186,9 +193,9 @@ class DemoUploadSearchColorHandler(tornado.web.RequestHandler):
         tmp_image = tmp + filename
         Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
         filename = imgfile['filename'].strip()
-        results=[]
+        results = []
 
-        list=Compare.Image().findSameColor(
+        list = Compare.Image().findSameColor(
             ImageTool.Image().getRgb(tmp_image), True)
 
         list = sorted(list, key=lambda k: k['score'])
