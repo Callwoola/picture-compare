@@ -3,9 +3,8 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from src import (config,routes)
+from src import (config, routes)
 import os
-
 
 
 def check_self():
@@ -15,6 +14,7 @@ def check_self():
     '''
     pass
 
+
 def info(str):
     '''
     :param str:
@@ -22,21 +22,25 @@ def info(str):
     '''
     print str
 
+
 def config_yaml():
     '''
     config the App value
     :return:
     '''
     import yaml
-    yaml_config=yaml.load(open("./config.yaml"))
+
+    yaml_config = yaml.load(open("./config.yaml"))
     for key in yaml_config.keys():
         # os.environ[key.upper()]=yaml_config[key]
         if not os.environ.has_key(key.upper()):
-            os.environ[key.upper()]=str(yaml_config[key])
+            os.environ[key.upper()] = str(yaml_config[key])
     pass
+
+
 config_yaml()
 
-route=routes.getRoutes(config)
+route = routes.getRoutes(config)
 application = tornado.web.Application(route)
 
 if __name__ == "__main__":
@@ -52,4 +56,3 @@ if __name__ == "__main__":
         .IOLoop \
         .current() \
         .start()
-
