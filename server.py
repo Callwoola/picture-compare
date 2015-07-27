@@ -47,6 +47,7 @@ if __name__ == "__main__":
     # settings = {'debug': True}
     check_self()
     info('config successful ... ')
+    print os.environ[config.PROJECT_PORT]
     application.listen(os.environ[config.PROJECT_PORT])
     application.debug = True
     # application.autoreload=False
