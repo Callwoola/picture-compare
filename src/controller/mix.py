@@ -17,15 +17,40 @@ class MixHandler(tornado.web.RequestHandler):
     RESTFUL api style
     """
 
+    SUPPORTED_METHODS = ("CONNECT", "GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
+
+    def get(self, type=None):
+        # print "has post"
+        self.set_header('Access-Control-Allow-Origin', '*')
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+        return self.set_status(204)
+
+    def options(self, type=None):
+        # print "has options"
+        self.set_header('Access-Control-Allow-Origin', '*')
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+        return self.set_status(204)
+
     def post(self, type=None):
         # -------------------------------------
         # first to get Image file and save
         # response json
-
+        self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Content-Type', 'application/json')
         jsonM = json_module.json_module()
 
-        imgfiles = self.request.files['file_img']
+        # imgfiles = self.request.files['file_img']
+
+        if "file_img" in self.request.files.keys():
+            imgfiles = self.request.files['file_img']
+        elif "file" in self.request.files.keys():
+            imgfiles = self.request.files['file']
+        else:
+            return self.write(jsonM
+                              .setStatus('status', 'error')
+                              .set('msg', 'not upload file error')
+                              .get())
+
         if len(imgfiles) > 1:
             return tornado.web.RequestHandler.write(jsonM
                 .setStatus('status', 'error')
