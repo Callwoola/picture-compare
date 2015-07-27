@@ -44,15 +44,28 @@ class Compare:
                     compare.setB(bean['map'])
                 else:
                     compare.setB(bean['addresses'])
+                compare.start()
+                compare.basehash()
+                compare.mse()
+                compare.perceptualHash()
+
+
+                compare.mixHash(),
 
                 results.append({
                     # 'score_basehash': compare.basehash(),
-                    'score': compare.basehash(),
+                    'score': compare.mixHash(),
                     # 'score_image': compare.mse(),
                     'url': '' if bean['type'] != 'url' else bean['addresses'],
                     'id': bean['id'],
                 })
-            return sorted(results, key=lambda k: k[sort])
+            sortedList = sorted(results, key=lambda k: k['score'])
+            item_id=0
+            for i in range(0,len(sortedList)):
+                print results[i]['score']
+                results[i]['score']=item_id
+                item_id+=1
+            return sortedList
         except Exception, e:
             print e
         return None

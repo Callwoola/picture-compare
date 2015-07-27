@@ -59,10 +59,16 @@ class MixHandler(tornado.web.RequestHandler):
         # print imgfiles
         imgfile = imgfiles[0]
         filename = imgfile['filename'].strip()
+
         filenname, ext = filename.split('.')
 
         m = hashlib.md5()
-        m.update(str(time.time()) + filename)
+        try:
+            # m.update(str(time.time()) + filename)
+            m.update(str(time.time()))
+        except Exception,e:
+            m.update(str(time.time()))
+            # m.update(str(time.time()) + filename.decode('gb2312'))
         hash = m.hexdigest()
         filename = hash + '.' + ext
         tmp = os.environ[config.PROJECT_DIR] + "img/tmp/"
@@ -72,36 +78,12 @@ class MixHandler(tornado.web.RequestHandler):
         # save filename as tmpfile
         Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
         image_url = os.environ[config.SERVER_URL] + '/img/tmp/' + filename
-        type = self.get_argument("type")
-        # if type in ("doc", "image","data"):
-        # return self.write(jsonM.setStatus('status', 'OK')
-        # .set('url', str(image_url))
-        #                       .set('hash', hash)
-        #                       .get())
 
-        # json_ = jsonM.setStatus('status', 'OK').set('url', str(image_url)).set('hash', hash).get()
-
-        # self.set_header('Content-Type', 'application/json')  # headers = self.request.headers
         type = self.get_argument("type")
-        # if type in ("json", "path", "url", "data"):
-        # if type == 'json':
-        #     getJson = self.request.body
-        # getJson = json_
-        # jsonM = json_module.json_module()
+
         try:
             import urllib2
 
-            # jsondata = #json.loads(getJson)
-            # ret = urllib2.urlopen(str(image_url)).read()
-            # m = hashlib.md5()
-            # m.update(str(time.time()))
-            # section_list = str(image_url).split('.')
-            # tmp_name = os.environ[config.PROJECT_DIR] + 'img/tmp/' + m.hexdigest() + section_list[-1]
-            # output = open(tmp_name, 'wb')
-            # output.write(ret)
-            # output.close()
-            print '---- in here'
-            # if ret.code == 200:
             ''' there is processing img and return img list '''
             from src.service.compare import Compare
 
