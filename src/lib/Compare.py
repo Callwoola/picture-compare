@@ -10,6 +10,7 @@ class Image:
     value_of_phash = None
     value_of_mse = None
     value_of_perceptualHash = None
+    value_of_colorCompare = None
 
     image_a_binary = None
     image_b_binary = None
@@ -21,6 +22,7 @@ class Image:
 
     def setA(self, path):
         self.image_b_path = path
+
     pass
 
     def setB(self, path):
@@ -70,12 +72,13 @@ class Image:
     # return the MSE, the lower the error, the more "similar"
     # NOTE: the two images must have the same dimension
     # ----------------------------------------------------------
-    def mse(self,path=True):
+    def mse(self, path=True):
         """
         :return: float
         """
         import numpy as np
         import cv2
+
         if path:
             imageA = cv2.imread(self.image_a_path)
             imageB = cv2.imread(self.image_b_path)
@@ -97,7 +100,7 @@ class Image:
     # return the MSE, the lower the error, the more "similar"
     # NOTE: the two images must have the same dimension
     # ----------------------------------------------------------
-    def basehash(self,path=True):
+    def basehash(self, path=True):
         """basehash compare If histogram smooth
         :return: float
         """
@@ -112,9 +115,8 @@ class Image:
             image1 = Image.open(self.image_a_binary)
             image2 = Image.open(self.image_b_binary)
 
-
         if not image1.size is image2.size:
-            image2=image2.resize(image1.size)
+            image2 = image2.resize(image1.size)
         pass
         h1 = image1.convert('RGB').histogram()
         h2 = image2.convert('RGB').histogram()
@@ -155,7 +157,7 @@ class Image:
     # perceptual Hash
     # very quick 8 x 8
     # ----------------------------------------------------------
-    def perceptualHash(self,path=True):
+    def perceptualHash(self, path=True):
         '''
         huhh...
         '''
@@ -193,10 +195,12 @@ class Image:
         '''
         if not self.value_of_mse is None and \
                 not self.value_of_perceptualHash is None and \
+                not self.value_of_phash is None and \
                 not self.value_of_phash is None:
             return self.value_of_perceptualHash * 1000 + \
                    self.value_of_phash * 1.5 + \
-                   self.value_of_mse * 0.8
+                   self.value_of_mse * 0.8 + \
+                   self.value_of_colorCompare * 1.1
         return None
         # --------------------
         # waiting ...
@@ -224,7 +228,9 @@ class Image:
             RGB_B = getRgb(self.image_b_path)
         if len(RGB_A) == 3 and len(RGB_B) == 3:
             score = (RGB_A[0] - RGB_B[0]) ** 2 + (RGB_A[1] - RGB_B[1]) ** 2 + (RGB_A[2] - RGB_B[2]) ** 2
+            self.value_of_colorCompare = abs(score)
             return abs(score)
+        self.value_of_colorCompare = 0
         return False
 
     def findSameColor(self, rgb=None, all=None):
