@@ -83,6 +83,7 @@ class Manage:
                     'id': i['data']['id'],
                     'addresses': i['data']['url'],
                     'type': 'url',
+                    'data': i['data']['data']
                 }
             )
         return results
@@ -105,59 +106,3 @@ class Manage:
         #         'map': 'D:/code/image/img/img1/3.jpg',
         #     }
         # )
-        # the_list.append(
-        #     {
-        #         'name': 'the1',
-        #         'addresses': 'http://localhost:8888/img/img1/4.jpg',
-        #         'id': 'the4',
-        #         'type': 'url',
-        #         'map': 'D:/code/image/img/img1/4.jpg',
-        #     }
-        # )
-        # the_list.append(
-        #     {
-        #         'name': 'the1',
-        #         'addresses': 'http://localhost:8888/img/img1/5.jpg',
-        #         'id': 'the5',
-        #         'type': 'url',
-        #         'map': 'D:/code/image/img/img1/5.jpg',
-        #     }
-        # )
-        # the_list.append(
-        #     {
-        #         'name': 'the1',
-        #         'addresses': 'http://localhost:8888/img/img1/6.jpg',
-        #         'id': 'the6',
-        #         'type': 'url',
-        #         'map': 'D:/code/image/img/img1/6.jpg',
-        #     }
-        # )
-        # the_list.append(
-        #     {
-        #         'name': 'the1',
-        #         'addresses': 'http://localhost:8888/img/img1/7.jpg',
-        #         'id': 'the7',
-        #         'type': 'url',
-        #         'map': 'D:/code/image/img/img1/7.jpg',
-        #     }
-        # )
-        # the_list.append(
-        #     {
-        #         'name': 'the1',
-        #         'addresses': 'http://localhost:8888/img/img1/8.jpg',
-        #         'id': 'the8',
-        #         'type': 'url',
-        #         'map': 'D:/code/image/img/img1/8.jpg',
-        #     }
-        # )
-        # the_list.append(
-        #     {
-        #         'name': 'the1',
-        #         'addresses': 'http://localhost:8888/img/img1/9.jpg',
-        #         'id': 'the9',
-        #         'type': 'url',
-        #         'map': 'D:/code/image/img/img1/9.jpg',
-        #     }
-        # )
-        # return the_list
-        # # import json
