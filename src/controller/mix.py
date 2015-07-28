@@ -60,7 +60,11 @@ class MixHandler(tornado.web.RequestHandler):
         imgfile = imgfiles[0]
         filename = imgfile['filename'].strip()
 
-        filenname, ext = filename.split('.')
+        # filenname, ext = filename.split('.')
+
+        file_vals= filename.split('.')
+        ext=file_vals[-1]
+        filenname=filename.replace(ext,'')
 
         m = hashlib.md5()
         try:
