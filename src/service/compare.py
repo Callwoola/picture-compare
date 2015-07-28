@@ -18,7 +18,7 @@ class Compare:
     def __init__(self):
         pass
 
-    def setCompareImage(self, path=None, sort="score"):
+    def setCompareImage(self, path=None,limit=10, sort="score"):
         '''
         :param data:
         :return: list | None
@@ -48,22 +48,22 @@ class Compare:
                 compare.basehash()
                 compare.mse()
                 compare.perceptualHash()
-
-
-                compare.mixHash(),
-
+                compare.colorCompare()
+                print bean
                 results.append({
                     # 'score_basehash': compare.basehash(),
                     'score': compare.mixHash(),
                     # 'score_image': compare.mse(),
                     'url': '' if bean['type'] != 'url' else bean['addresses'],
                     'id': bean['id'],
+                    'data': bean['data']
                 })
             sortedList = sorted(results, key=lambda k: k['score'])
+            sortedList = sortedList[:limit]
             item_id=0
             for i in range(0,len(sortedList)):
-                print results[i]['score']
-                results[i]['score']=item_id
+                # print results[i]['score']
+                sortedList[i]['score']=item_id
                 item_id+=1
             return sortedList
         except Exception, e:
