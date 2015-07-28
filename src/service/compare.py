@@ -49,14 +49,15 @@ class Compare:
                 compare.mse()
                 compare.perceptualHash()
                 compare.colorCompare()
-                print bean
+                # print bean
                 results.append({
                     # 'score_basehash': compare.basehash(),
                     'score': compare.mixHash(),
                     # 'score_image': compare.mse(),
                     'url': '' if bean['type'] != 'url' else bean['addresses'],
                     'id': bean['id'],
-                    'data': bean['data']
+                    'data': bean['data'],
+                    'name': bean['name'],
                 })
             sortedList = sorted(results, key=lambda k: k['score'])
             sortedList = sortedList[:limit]

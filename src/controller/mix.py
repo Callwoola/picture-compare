@@ -93,7 +93,7 @@ class MixHandler(tornado.web.RequestHandler):
 
             compareDict = Compare().setCompareImage(tmp_image)
 
-            # print compareDict
+            print compareDict
             return self.write(jsonM
                 .set('status', 'OK')
                 .set('data', compareDict)
