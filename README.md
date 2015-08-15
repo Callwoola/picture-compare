@@ -20,9 +20,8 @@ sudo pip install requirements.txt
 ### 运行
 
 ··· shell
-> $ sudo service picturecompare start
-
-> $ sudo service picturecompare stop
+sudo service picturecompare start
+sudo service picturecompare stop
 ```
 
-
+欢迎大家PR
