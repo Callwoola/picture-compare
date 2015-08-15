@@ -35,6 +35,16 @@ def config_yaml():
         # os.environ[key.upper()]=yaml_config[key]
         if not os.environ.has_key(key.upper()):
             os.environ[key.upper()] = str(yaml_config[key])
+            if key == "project_dir":
+                os.environ[key.upper()] = os.getcwd() + "/"
+                pass
+            if key == "storage_index_db":
+                os.environ[key.upper()] = os.getcwd() + "/" + str(yaml_config[key])
+                pass
+            if key == "template":
+                os.environ[key.upper()] = os.getcwd() + "/" + str(yaml_config[key])
+                pass
+
     pass
 
 
@@ -47,7 +57,7 @@ if __name__ == "__main__":
     # settings = {'debug': True}
     check_self()
     info('config successful ... ')
-    print os.environ[config.PROJECT_PORT]
+
     application.listen(os.environ[config.PROJECT_PORT])
     application.debug = True
     # application.autoreload=False

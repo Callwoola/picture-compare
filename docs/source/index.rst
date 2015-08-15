@@ -31,17 +31,27 @@ http://<server>:<port>/_index?type=json
     }
 }
 
+
 compare image
-http://localhost:6666/_pc?type=json
+http://localhost:<port>/_pc?type=json
 {
     "query" : {
         "url" : "https://www.baidu.com/img/bd_logo1.png"
     }
 }
 
+
 upload
-http://192.168.1.106:8888/_upload?type=data
+http://<server>:<port>/_upload?type=data
 {
     name : file_img
+    body :data
+}
+
+
+mix upload and get json
+http://<server>:<port>/_mix?type=data
+{
+    name : file_img|file
     body :data
 }

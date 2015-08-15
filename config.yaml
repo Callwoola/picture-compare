@@ -1,11 +1,12 @@
 name: Picture Compare
-template: D:/code/image/src/template
+template: src/template
 database: None
-project_dir:  D:/code/image/
+project_dir:  None
 static_dir: img/
 test_compare_img: 1.jpg
+
 project_port: 5555
 server_url: http://localhost:5555
-storage_index_db: D:/code/image/img/imgdb/img.db
+storage_index_db: img/imgdb/img.db
 # test
 image_package: [img1, img2, img3 ,img4]

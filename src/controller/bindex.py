@@ -15,26 +15,26 @@ from tornado import gen
 from tinydb import TinyDB, where
 
 
-
-
-class testIndexHandler(tornado.web.RequestHandler):
-    def get(self, type=None):
-        # self.set_header('Content-Type', 'application/json')
-        self.write('''
-<?xml version="1.0" encoding="utf-8" ?>
-<!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd">
-<cross-domain-policy>
-    <allow-access-from domain="*" />
-</cross-domain-policy>
-        ''')
-
 class BuildIndexHandler(tornado.web.RequestHandler):
     """
     RESTFUL api style
     """
 
+
+    def delete(self, type=None):
+        try:
+            os.remove(os.environ[config.STORAGE_INDEX_DB])
+        except:
+            pass
+        self.set_header('Content-Type', 'application/json')
+        jsonM = json_module.json_module()
+        self.write(jsonM.setStatus('status', 'OK')
+                              .set('msg', str('delete index success!'))
+                              .get())
+
     @tornado.gen.coroutine
     def post(self, type=None):
+        # rebuild db
         db = TinyDB(os.environ[config.STORAGE_INDEX_DB])
         # -------------------------------------
         # first to get Image file and save
@@ -76,10 +76,11 @@ class BuildIndexHandler(tornado.web.RequestHandler):
         # tornado.ioloop.IOLoop().run_sync(the_queue)
         getJson = self.request.body
         jsondata = json.loads(getJson)
-        print jsondata
+        # print jsondata
         __url = jsondata['query']['url']
         __name = jsondata['query']['name']
         __id = jsondata['query']['id']
+        __data = jsondata['query']['data']
         import urllib2
 
         ret = urllib2.urlopen(jsondata['query']['url'])
@@ -99,13 +100,14 @@ class BuildIndexHandler(tornado.web.RequestHandler):
             # ----------------------
             # build index
             id = str(uuid.uuid4())
+            print __data
             db.insert({'id': id,
                        'data': {
                            'id': __id,
                            'url': __url,
                            'map': tmp_name,
                            'name': __name,
-                           'data': {}
+                           'data': __data
                        }})
             return self.write(jsonM.setStatus('status', 'OK')
                               .set('msg', str('index success!'))
