@@ -1,23 +1,28 @@
-Python compare picture libraray
+pictureCompare python 视图服务
 =============================================
 
-python 做的第三方图片比对服务
+### python 的第三方视图服务
 
-* 1 Waring You must be got a lot of picture!
-* 2 color compare was terrible
-* 2 You must be got a(A lot) Strong computer
+* 1 当前版本的视图成功率并不理想,在如果内置的几个算法在不同类型的图片发挥不同(详情请看文档)
+* 2 色彩对比在当前版本比较糟糕
+* 2 单进程(可配置),所以如果需要高性能请使用mapreduce等工具
 
-> First config the yaml file First
 
-> please make sure redis is runing...
-### use Image numpy openCV ...
+### 使用
+> 首先配置好yaml文件 
 
-### demo Working on Tornado
+> 请保证 redis正常运行...
 
-### linux
+··· python
+sudo pip install requirements.txt
+···
 
+### 运行
+
+··· shell
 > $ sudo service picturecompare start
 
 > $ sudo service picturecompare stop
+```
 
-Develop by Neo<call@woola.net>
+
