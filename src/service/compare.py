@@ -71,5 +71,5 @@ class Compare:
         return None
 
     def getAllList(self):
-
+        # os path
         pass
