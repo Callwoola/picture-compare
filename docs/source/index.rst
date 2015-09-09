@@ -1,57 +1,16 @@
-.. pictureCompare documentation master file, created by
-   sphinx-quickstart on Tue Jul 14 09:35:20 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. _content
 
-Welcome to pictureCompare's documentation!
+pictureCompare 使用手册!
 ==========================================
 
-Contents:
-
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
+    start/main
+    develop/main
 
-
-Indices and tables
+快捷查询
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
-
-
-index file
-http://<server>:<port>/_index?type=json
-{
-    "query" : {
-        "url" : "http://dmc-oss.yoozi.cn/images/f3f16faee39224fb36bcc871b67a305e.png@1e_400w_400h_1c_0i_1o_90Q_1x.jpg",
-        "name" : "asdfasdf",
-        "id" : "223"
-    }
-}
-
-
-compare image
-http://localhost:<port>/_pc?type=json
-{
-    "query" : {
-        "url" : "https://www.baidu.com/img/bd_logo1.png"
-    }
-}
-
-
-upload
-http://<server>:<port>/_upload?type=data
-{
-    name : file_img
-    body :data
-}
-
-
-mix upload and get json
-http://<server>:<port>/_mix?type=data
-{
-    name : file_img|file
-    body :data
-}
