@@ -6,7 +6,7 @@ class baseController:
 
     # set json
 
-    # set input 
+    # set input
     def __init__(self):
         pass
 
