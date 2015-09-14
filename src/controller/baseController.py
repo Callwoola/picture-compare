@@ -3,6 +3,10 @@
 
 
 class baseController:
+
+    # set json
+
+    # set input 
     def __init__(self):
         pass
 
