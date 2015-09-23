@@ -21,3 +21,9 @@ class baseController:
     
     def json(self):
         return json_module.json_module()
+
+    def image(self):
+        pass
+
+    def compare(self):
+        pass
