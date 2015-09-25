@@ -14,11 +14,13 @@ class baseController:
         if str(ok) == '':
             return None
 
+    def the_one(self):
+
         return None
-    
+
     def getJson(self):
         pass
-    
+
     def json(self):
         return json_module.json_module()
 
