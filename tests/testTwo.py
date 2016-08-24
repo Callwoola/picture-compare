@@ -13,11 +13,12 @@ def get(i):
     return (data - data.mean()) / data.std()
 
 
-im1 = get("img/img1/1.jpg")
-im2 = get("img/img1/2.jpg")
-im3 = get("img/img1/3.jpg")
+im1 = get("./img/1.jpg")
+im2 = get("./img/3.jpg")
+im3 = get("./img/4.jpg")
 
 c11 = c2d(im1, im1, mode='same')  # baseline
+print 'starting...'
 print c11.max()
 
 exit()
