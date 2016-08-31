@@ -78,14 +78,13 @@ class Manage:
             condition = None
             for term_key, term_value in terms.items():
                 # not allow empty condition
-                if condition not None:
-                    condition = (where('data').where('data').has(term_key) == term_value) | condition
+                if not condition is None:
+                    condition = (where('data').has('data').has(term_key) == term_value) | condition
                 else:
-                    condition = (where('data').where('data').has(term_key) == term_value)
+                    condition = (where('data').has('data').has(term_key) == term_value)
             list = db.search(condition)
-        else:    
+        else:
             list = db.all()
-
         # process result data for reture
         results = []
         for i in list:
