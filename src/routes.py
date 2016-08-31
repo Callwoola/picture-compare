@@ -34,8 +34,12 @@ def getRoutes(config):
         (r'/_mix(.*)',mix.MixHandler),
         # (r'/_color(.*)',compare.pcHandler),
         (r'/_index(.*)',bindex.BuildIndexHandler),
+        (r'/_add(.*)', bindex.AddHandler),
+        (r'/_delete(.*)', bindex.CleaerIndexHandler),
 
-
+        # ---------------------------------------------
+        # other tool url
+        # ---------------------------------------------
         (r'/crossdomain.xml',urltool.urltoolHandler)
     ]
 

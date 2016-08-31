@@ -43,6 +43,11 @@ class pcHandler(tornado.web.RequestHandler):
                     m = hashlib.md5()
                     m.update(str(time.time()))
                     section_list=jsondata['query']['url'].split('.')
+                    terms = []
+                    try:
+                        terms = jsondata['query']['terms']
+                    except:
+                        pass
                     tmp_name = os.environ[config.PROJECT_DIR] + 'img/tmp/' + m.hexdigest() + section_list[-1]
                     output = open(tmp_name, 'wb')
                     output.write(ret)
@@ -51,7 +56,7 @@ class pcHandler(tornado.web.RequestHandler):
                     # if ret.code == 200:
                     ''' there is processing img and return img list '''
                     from src.service.compare import Compare
-                    compareDict = Compare().setCompareImage(tmp_name)
+                    compareDict = Compare().setCompareImage(tmp_name, terms)
 
                     # print compareDict
                     self.write(jsonM
@@ -60,14 +65,16 @@ class pcHandler(tornado.web.RequestHandler):
                                .get())
                 except Exception, e:
                     print e
-                    tornado.web.RequestHandler.write(jsonM
-                                                     .set('status', 'error')
-                                                     .set('msg', 'json format error!')
-                                                     .get())
+                    self.write(jsonM
+                               .set('status', 'error')
+                               .set('msg', 'json format error!')
+                               .get())
             if type in ("path", "url", "data"):
                 ''' get post image file '''
-                tornado.web.RequestHandler.write(jsonM
-                                                 .set('status', 'error')
-                                                 .set('msg', 'waiting')
-                                                 .get())
+                self.write(
+                    jsonM
+                    .set('status', 'error')
+                    .set('msg', 'waiting')
+                    .get()
+                )
                 pass

@@ -19,19 +19,9 @@ class BuildIndexHandler(tornado.web.RequestHandler):
     """
     RESTFUL api style
     """
-
-
-    def delete(self, type=None):
-        try:
-            os.remove(os.environ[config.STORAGE_INDEX_DB])
-        except:
-            pass
-        self.set_header('Content-Type', 'application/json')
-        jsonM = json_module.json_module()
-        self.write(jsonM.setStatus('status', 'OK')
-                              .set('msg', str('delete index success!'))
-                              .get())
-
+    def get(self, type=None):
+        self.write("please use post method")
+        
     @tornado.gen.coroutine
     def post(self, type=None):
         # rebuild db
@@ -44,6 +34,7 @@ class BuildIndexHandler(tornado.web.RequestHandler):
         # type in ( insert update delete )
         self.set_header('Content-Type', 'application/json')
         jsonM = json_module.json_module()
+
         # -----------------------
         # download image
         # make index
@@ -82,7 +73,7 @@ class BuildIndexHandler(tornado.web.RequestHandler):
         __id = jsondata['query']['id']
         __data = jsondata['query']['data']
         import urllib2
-
+        print json
         ret = urllib2.urlopen(jsondata['query']['url'])
         if ret.code == 200:
             # ------------------------
@@ -116,3 +107,25 @@ class BuildIndexHandler(tornado.web.RequestHandler):
             return self.write(jsonM.setStatus('status', 'error')
                               .set('msg', str('file error'))
                               .get())
+
+from src.core.app import App
+
+class AddHandler(App):
+    def get(self):
+        return self.write('[]')
+    
+
+
+class CleaerIndexHandler(tornado.web.RequestHandler):
+    def delete(self, type=None):
+        try:
+            os.remove(os.environ[config.STORAGE_INDEX_DB])
+        except:
+            pass
+        self.set_header('Content-Type', 'application/json')
+        jsonM = json_module.json_module()
+        self.write(jsonM.setStatus('status', 'OK')
+                              .set('msg', str('delete index Success!'))
+                              .get())
+    def get(self, type=None):
+        self.write("error method")

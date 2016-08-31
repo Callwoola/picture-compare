@@ -1,6 +1,6 @@
 # coding:utf-8
 
-from tinydb import TinyDB
+from tinydb import TinyDB,where
 from src import config
 import os
 
@@ -66,13 +66,27 @@ class Manage:
     # ----------------------------------------------------------
     # return Tinydb all list
     # ---------------------------------------------------------
-    def get_db_list(self, PATH=None):
+    def get_db_list(self, terms=None, PATH=None):
         '''
         :param PATH:
         :return:
         '''
         db = TinyDB(os.environ[config.STORAGE_INDEX_DB])
-        list = db.all()
+        list = []
+        # multipul condition
+        if len(terms) > 0:
+            condition = None
+            for term_key, term_value in terms.items():
+                # not allow empty condition
+                if condition not None:
+                    condition = (where('data').where('data').has(term_key) == term_value) | condition
+                else:
+                    condition = (where('data').where('data').has(term_key) == term_value)
+            list = db.search(condition)
+        else:    
+            list = db.all()
+
+        # process result data for reture
         results = []
         for i in list:
             results.append(
@@ -87,6 +101,7 @@ class Manage:
                 }
             )
         return results
+
         #
         # the_list.append(
         #     {

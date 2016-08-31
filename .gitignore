@@ -293,3 +293,5 @@ tests/tmp/*
 /img/storage/*
 !/img/storage/.gitkeep
 *.db
+
+/venv

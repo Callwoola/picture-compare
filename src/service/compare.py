@@ -18,7 +18,8 @@ class Compare:
     def __init__(self):
         pass
 
-    def setCompareImage(self, path=None,limit=10, sort="score"):
+    def setCompareImage(self, path=None, terms=None, limit=10, sort="score"):
+
         '''
         :param data:
         :return: list | None
@@ -31,7 +32,7 @@ class Compare:
             # maybe add index for quick find image
             from src.lib.Manage import Manage
 
-            the_list = Manage().get_db_list()
+            the_list = Manage().get_db_list(terms)
 
             compare = compareTool.Image()
             results = []
