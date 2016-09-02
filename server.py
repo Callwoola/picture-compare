@@ -41,15 +41,10 @@ def config_yaml():
             os.environ[key.upper()] = str(yaml_config[key])
             if key == "project_dir":
                 os.environ[key.upper()] = os.getcwd() + "/"
-                pass
             if key == "storage_index_db":
                 os.environ[key.upper()] = os.getcwd() + "/" + str(yaml_config[key])
-                pass
             if key == "template":
                 os.environ[key.upper()] = os.getcwd() + "/" + str(yaml_config[key])
-                pass
-
-    pass
 
 
 config_yaml()

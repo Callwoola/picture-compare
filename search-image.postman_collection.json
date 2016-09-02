@@ -1,0 +1,31 @@
+{
+	"variables": [],
+	"info": {
+		"name": "search-image",
+		"_postman_id": "c304fceb-9582-c64f-95bb-8c43097f7a0b",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "search image",
+			"request": {
+				"url": "localhost:5555/_pc?type=json",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\" : {\n        \"url\" : \"https://www.baidu.com/img/bd_logo1.png\",\n        \"terms\" : {\n            \"leaf_category\":62\n        }\n    }\n}\n"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

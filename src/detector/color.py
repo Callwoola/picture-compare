@@ -1,0 +1,2 @@
+class color():
+    pass

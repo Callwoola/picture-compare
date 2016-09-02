@@ -1,4 +1,5 @@
 # coding:utf-8
+<<<<<<< variant A
 class Image:
     '''
     Compare Image differ  I find some useful function
@@ -327,3 +328,36 @@ class Image:
         # l2=sqrt(r2*r2+g2*g2+b2*b2)
         # cos(a)=(r1*r2+g1*g2+b1*b2)/(l1*l2)
         return
+>>>>>>> variant B
+import tornado
+import tornado.ioloop
+import tornado.web
+import tornado.template
+import json
+import StringIO
+from src.module import json_module
+from src import config
+from src.adapter import db
+import hashlib, time, os
+
+import unittest
+
+class TestBaseSearch(unittest.TestCase):
+    def test_first(self):
+        ''' there is processing img and return img list '''
+        file_path = '/Users/liyang/Code/picture-compare/img/img1/1.jpg'
+        tmp_name = file_path
+        terms = []
+        from src.service.compare import Compare
+        compareDict = Compare().setCompareImage(tmp_name, terms)
+        print compareDict
+        self.assertTrue(len(compareDict) > 0)
+
+    def test_base(self):
+        self.assertEqual(True, True)
+
+
+def main():
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestBaseSearch)
+    unittest.TextTestRunner(verbosity=2).run(suite)
+======= end
