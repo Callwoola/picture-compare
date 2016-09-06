@@ -37,7 +37,6 @@ class pcHandler(tornado.web.RequestHandler):
                 jsonM = json_module.json_module()
                 try:
                     import urllib2
-
                     jsondata = json.loads(getJson)
                     ret = urllib2.urlopen(jsondata['query']['url']).read()
                     m = hashlib.md5()
@@ -45,7 +44,7 @@ class pcHandler(tornado.web.RequestHandler):
                     section_list=jsondata['query']['url'].split('.')
                     terms = []
                     try:
-                        terms = jsondata['query']['terms']
+                        terms = jsondata['terms']
                     except:
                         pass
                     tmp_name = os.environ[config.PROJECT_DIR] + 'img/tmp/' + m.hexdigest() + section_list[-1]

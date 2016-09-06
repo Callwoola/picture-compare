@@ -74,7 +74,7 @@ class Compare:
                 })
             sortedList = sorted(results, key=lambda k: k['score'])
             sortedList = sortedList[:limit]
-            item_id=0
+            item_id = 0
             for i in range(0,len(sortedList)):
                 # print results[i]['score']
                 sortedList[i]['score']=item_id
@@ -116,7 +116,13 @@ class Compare:
                 })
             sortedList = sorted(results, key=lambda k: k['score'])
             sortedList = sortedList[:limit]
-            item_id=0
+
+            # print sortedList
+            # print len(sortedList)
+            # exit()
+            if not len(sortedList) > 0:
+                raise Exception('Not match any image!')
+            item_id = 0
             for i in range(0,len(sortedList)):
                 sortedList[i]['score']=item_id
                 item_id+=1

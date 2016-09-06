@@ -9,6 +9,11 @@ class Manage:
     def __init__(self):
         pass
 
+    
+    def all(self):
+        db = TinyDB(os.environ[config.STORAGE_INDEX_DB])
+        return db.all()
+    
     # ----------------------------------------------------------
     # get directory file list
     # ----------------------------------------------------------

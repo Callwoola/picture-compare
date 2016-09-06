@@ -3,16 +3,20 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from src.controller import (search,demo,compare,upload,bindex,urltool,mix)
+from src.controller import (search,demo,compare,upload,bindex,urltool,mix,home)
 import os
 
 def getRoutes(config):
     Routes = [
 
         # ---------------------------------------------
+        # home dashboard url
+        # ---------------------------------------------
+        (r"/(.)", home.HomeHandler),
+
+        # ---------------------------------------------
         # demo url
         # ---------------------------------------------
-        (r"/", demo.HomeHandler),
         (r"/demo", demo.DemoHandler),
         (r"/search", demo.DemoSearchHandler),
         (r"/search_color", demo.DemoSearchColorHandler),
