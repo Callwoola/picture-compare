@@ -83,14 +83,28 @@ class Manage:
             condition = None
             for term_key, term_value in terms.items():
                 # not allow empty condition
+                print term_key, term_value
                 if not condition is None:
-                    condition = (where('data').has('data').has(term_key) == term_value) | condition
+                    condition = (where('data').has('data').has(term_key) == term_value) & condition
                 else:
                     condition = (where('data').has('data').has(term_key) == term_value)
             list = db.search(condition)
+            if len(list) < 10:
+                condition = None
+                for term_key, term_value in terms.items():
+                    # not allow empty condition
+                    print term_key, term_value
+                    if not condition is None:
+                        condition = (where('data').has('data').has(term_key) == term_value) | condition
+                    else:
+                        condition = (where('data').has('data').has(term_key) == term_value)
+                list = db.search(condition)
+                
         else:
             list = db.all()
+            
         # process result data for reture
+        print condition
         results = []
         for i in list:
             results.append(
