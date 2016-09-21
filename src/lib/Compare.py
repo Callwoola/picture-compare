@@ -61,11 +61,8 @@ class Image:
         os.remove(self.image_b_path)
 
     # ----------------------------------------------------------
-    # mse
-    #
-    # return int
-    # return the MSE, the lower the error, the more "similar"
-    # NOTE: the two images must have the same dimension
+    # mse 均方误差
+    # MSE可以评价数据的变化程度，MSE的值越小，说明预测模型描述实验数据具有更好的精确度。与此相对应的，还有均方根误差RMSE、平均绝对百分误差等等。
     # ----------------------------------------------------------
     def mse(self, path=True):
         """
@@ -90,10 +87,7 @@ class Image:
 
     # ----------------------------------------------------------
     # base
-    #
-    # return int
-    # return the MSE, the lower the error, the more "similar"
-    # NOTE: the two images must have the same dimension
+    # 算法 -> 直方图比较
     # ----------------------------------------------------------
     def basehash(self, path=True):
         """basehash compare If histogram smooth
@@ -151,6 +145,7 @@ class Image:
     # ----------------------------------------------------------
     # perceptual Hash
     # very quick 8 x 8
+    # 感知 hash 算法 , 通过指纹匹配
     # ----------------------------------------------------------
     def perceptualHash(self, path=True):
         '''
@@ -166,7 +161,7 @@ class Image:
             return reduce(lambda x, (y, z): x | (z << y),
                           enumerate(map(lambda i: 0 if i < avg else 1, im.getdata())),
                           0)
-
+        # 汗明距离
         def hamming(h1, h2):
             h, d = 0, h1 ^ h2
             while d:
@@ -181,13 +176,16 @@ class Image:
         return value
 
     # ----------------------------------------------------------
-    # mix Hash
+    # Mixom Hash
+    # 混合 hash 算法
     # ----------------------------------------------------------
     def mixHash(self):
         '''
         get a mix score
         :return:
         '''
+        return self.value_of_mse
+    
         if not self.value_of_mse is None and \
                 not self.value_of_perceptualHash is None and \
                 not self.value_of_phash is None and \
@@ -204,6 +202,7 @@ class Image:
 
     # ----------------------------------------------------------
     # color compare
+    # 
     # ----------------------------------------------------------
     def colorCompare(self, RGB_A=None, RGB_B=None):
         '''

@@ -47,9 +47,7 @@ class DemoHandler(tornado.web.RequestHandler):
                 images[i]['code'] = compare.basehash()
                 images[i]['code2'] = compare.mse()
                 images[i]['code3'] = compare.perceptualHash()
-
-                images[i]['code4'] = None
-
+                images[i]['code4'] = compare.colorCompare()
                 images[i]['color'] = image.getRgbaString(images[i]['path'])
                 compare.end()
                 # images[i]['code3'] = Compare.correlate2d()

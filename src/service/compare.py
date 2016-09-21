@@ -38,7 +38,6 @@ class Compare:
             # result must got to sort and set size
             # maybe add index for quick find image
 
-
             the_list = Manage().get_db_list(terms)
 
             compare = compareTool.Image()

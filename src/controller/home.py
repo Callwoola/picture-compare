@@ -17,17 +17,9 @@ class HomeHandler(tornado.web.RequestHandler):
         self.set_header('Content-Type', 'application/json')
         jsonM = json_module.json_module()
         the_list = Manage().all()
-
-        # result_json = jsonM
-        #     # .set('status', 'error')
-        #     .set('msg','post json')  # 
-        #     .set('all',the_list)
-        #     .get()
+        result = jsonM.set('status', 'ok') \
+                    .set('count_data', str(len(the_list))) \
+                    .get()
         self.write(
-            result_json
+            result
         )
-        
-        # self.write(tornado.template
-        #     .Loader(os.environ[config.TEMPLATE])
-        #     .load("index.html")
-        #     .generate())

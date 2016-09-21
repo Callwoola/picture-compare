@@ -9,10 +9,6 @@ import os
 def getRoutes(config):
     Routes = [
 
-        # ---------------------------------------------
-        # home dashboard url
-        # ---------------------------------------------
-        (r"/(.)", home.HomeHandler),
 
         # ---------------------------------------------
         # demo url
@@ -44,7 +40,12 @@ def getRoutes(config):
         # ---------------------------------------------
         # other tool url
         # ---------------------------------------------
-        (r'/crossdomain.xml',urltool.urltoolHandler)
+        (r'/crossdomain.xml',urltool.urltoolHandler),
+        
+        # ---------------------------------------------
+        # home dashboard url
+        # ---------------------------------------------
+        (r"/(.*)", home.HomeHandler),
     ]
 
     return Routes

@@ -19,7 +19,6 @@ class Image:
         '''
         r, g, b, a = im.open(path).convert('RGBA').resize((1, 1)).getcolors()[0][1]
         return "rgba(%d, %d, %d, %d)" % (r, g, b, a)
-    pass
 
     # ----------------------------------------------------------
     # get picture color rgba
@@ -32,7 +31,6 @@ class Image:
         '''
         r, g, b, a = im.open(path).convert('RGBA').resize((1, 1)).getcolors()[0][1]
         return (r, g, b, a)
-    pass
 
     # ----------------------------------------------------------
     # get picture color rgb
@@ -45,7 +43,6 @@ class Image:
         '''
         r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
         return "rgb(%d, %d, %d)" % (r, g, b)
-    pass
 
     # ----------------------------------------------------------
     # get picture color rgb
@@ -58,8 +55,6 @@ class Image:
         '''
         r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
         return (r, g, b)
-    pass
-
 
     def getHsi(self,path):
         '''
@@ -85,4 +80,3 @@ class Image:
         H = math.cos^-1( (((R-G)+(R-B))/2)/ (math.sqrt((R-G)^2 + (R-B)*(G-B) )))
 
         return (H,S,I)
-    pass

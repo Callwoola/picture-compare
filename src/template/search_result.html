@@ -9,16 +9,16 @@
 </header>
 
 <h3>code1</h3>
-<ul>
+<table>
     {% for result in results_code1 %}
-    <li>
-        <img style="width:60px;height:60px;" src="tests/tmp/{{ origin_img }}"/>
-        <img style="width:60px;height:60px;" src="tests/img/{{ result['filename'] }}">
-        <img style="width:60px;height:60px;background-color:{{result['color']}}">
-        <span>{{result['code1']}}</span> //
-    </li>
+    <tr>
+        <tr><img style="width:60px;height:60px;" src="tests/tmp/{{ origin_img }}"/></tr>
+            <tr><img style="width:60px;height:60px;" src="tests/img/{{ result['filename'] }}"></tr>
+            <tr><img style="width:60px;height:60px;background-color:{{result['color']}}"></tr>
+            <tr><span>{{result['code1']}}</span> //</tr>
+    </tr>
     {% end %}
-</ul>
+</table>
 
 <h3>code2</h3>
 <ul>

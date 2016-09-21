@@ -1,25 +1,16 @@
 # coding:utf-8
-import src.module.baseModule
 import json
 from StringIO import StringIO
 
-
-class baseModule(object):
-    def __init__(self):
-        print 'base module'
-        pass
-    pass
-
-
-class json_module(baseModule):
+class Data:
     '''
     this is pc json standard
     The json must be have status and data
     status is a str
     data was dict
     '''
-
-    def __init__(self):
+    def __init__(self, data = []):
+        self.origin = data
         self.data = {}
 
     def __str__(self):
@@ -73,3 +64,9 @@ class json_module(baseModule):
         :return:
         '''
         return json.dumps(self.data)
+
+    def loads(self, raw_data = ''):
+        return json.loads(raw_data)
+    
+    def to_string(self):
+        return json.dumps(self.origin)
