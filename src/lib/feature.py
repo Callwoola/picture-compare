@@ -1,5 +1,10 @@
 # coding:utf-8
-class Image:
+import math
+import operator
+from PIL import Image as im
+
+# 算法特征
+class Feature:
     '''
     Compare Image differ  I find some useful function
     Maybe Some function would suit for you Project
@@ -19,6 +24,16 @@ class Image:
         # image A is String of path
         # image B is String of path
         pass
+
+    # 使用比特码对比
+    byte_base = None
+    byte_storage = None
+
+    def set_byte_base_image(self, byte):
+        self.byte_base = byte
+
+    def set_byte_storage_image(self, byte):
+        self.byte_storage = byte        
 
     def setA(self, path):
         self.image_b_path = path
@@ -47,7 +62,7 @@ class Image:
     def start(self):
         import os
         from PIL import Image
-
+        # print 'start - compare'
         imA = Image.open(self.image_a_path)
         imB = Image.open(self.image_b_path)
         if not imA.size is imB.size:
@@ -71,6 +86,17 @@ class Image:
         import numpy as np
         import cv2
 
+        # 使用 io byte 读取数据
+        # import numpy as np
+        # a1=io.BytesIO(rr.get('base_image_name'))
+        # nparr = np.fromstring(a1.read(), np.uint8)
+        # img_np = cv2.imdecode(nparr, cv2.CV_LOAD_IMAGE_COLOR)
+        # cv2.imshow('image',img_np)
+        # cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+        # cv2.imshow('image',img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+
         if path:
             imageA = cv2.imread(self.image_a_path)
             imageB = cv2.imread(self.image_b_path)
@@ -93,16 +119,13 @@ class Image:
         """basehash compare If histogram smooth
         :return: float
         """
-        import math
-        import operator
-        from PIL import Image
 
         if path:
-            image1 = Image.open(self.image_a_path)
-            image2 = Image.open(self.image_b_path)
+            image1 = im.open(self.image_a_path)
+            image2 = im.open(self.image_b_path)
         else:
-            image1 = Image.open(self.image_a_binary)
-            image2 = Image.open(self.image_b_binary)
+            image1 = im.open(self.image_a_binary)
+            image2 = im.open(self.image_b_binary)
 
         if not image1.size is image2.size:
             image2 = image2.resize(image1.size)
@@ -118,6 +141,29 @@ class Image:
         self.value_of_phash = rms
         return rms
 
+    # ----------------------------------------------------------
+    # base
+    # 算法 -> 直方图比较
+    # ----------------------------------------------------------
+    def _base(self):
+        image1 = im.open(self.byte_base)
+        image2 = im.open(self.byte_storage)
+
+        if not image1.size is image2.size:
+            image2 = image2.resize(image1.size)
+        pass
+        h1 = image1.convert('RGB').histogram()
+        h2 = image2.convert('RGB').histogram()
+
+        rms = math.sqrt(
+            reduce(operator.add, list(map(lambda a, b: (a - b) ** 2, h1, h2)))
+            /
+            len(h1)
+        )
+        self.value_of_phash = rms
+        return rms
+
+    
     # ----------------------------------------------------------
     # correlate2d
     # very slow
@@ -176,6 +222,39 @@ class Image:
         return value
 
     # ----------------------------------------------------------
+    # perceptual Hash
+    # very quick 8 x 8
+    # 感知 hash 算法 , 通过指纹匹配
+    # ----------------------------------------------------------
+    def _phash(self):
+        def avhash(io, im):
+            # print im
+            # print im
+            # if not isinstance(im, Image.Image):
+            the_image = im.open(io)
+            the_image = the_image.resize((8, 8), im.ANTIALIAS).convert('L')
+            avg = reduce(lambda x, y: x + y, the_image.getdata()) / 64.
+            return reduce(
+                lambda x, (y, z): x | (z << y),
+                enumerate(map(lambda i: 0 if i < avg else 1, the_image.getdata())),
+                0
+            )
+
+        # 汗明距离
+        def hamming(h1, h2):
+            h, d = 0, h1 ^ h2
+            while d:
+                h += 1
+                d &= d - 1
+            return h
+
+        a = avhash(self.byte_base, im)
+        b = avhash(self.byte_storage, im)
+        value = hamming(a, b)
+        self.value_of_perceptualHash = value
+        return value
+
+    # ----------------------------------------------------------
     # Mixom Hash
     # 混合 hash 算法
     # ----------------------------------------------------------
@@ -227,13 +306,38 @@ class Image:
         self.value_of_colorCompare = 0
         return False
 
+    # ----------------------------------------------------------
+    # color compare
+    # 
+    # ----------------------------------------------------------
+    def _color(self, RGB_A=None, RGB_B=None):
+        '''
+        计算两个三维向量距离
+        （R1-R2)^2   +   (G1-G2)^2   +   (B1-B2)^2   的值的平方根，即颜色空间的距离
+        距离越大，差距就越大。
+        :return:
+        '''
+        def getRgb(io):
+            r, g, b = im.open(io).convert('RGB').resize((1, 1)).getcolors()[0][1]
+            return [r, g, b]
+
+        if RGB_A is None and RGB_B is None:
+            RGB_A = getRgb(self.byte_base)
+            RGB_B = getRgb(self.byte_storage)
+        if len(RGB_A) == 3 and len(RGB_B) == 3:
+            score = (RGB_A[0] - RGB_B[0]) ** 2 + (RGB_A[1] - RGB_B[1]) ** 2 + (RGB_A[2] - RGB_B[2]) ** 2
+            self.value_of_colorCompare = abs(score)
+            return abs(score)
+        self.value_of_colorCompare = 0
+        return False
+
     def findSameColor(self, rgb=None, all=None):
         '''
         :return:
         '''
-        from src.module.color_module import rgbList
-        from PIL import Image as im
-
+        from src.lib.image import Image
+        # from PIL import Image as im
+        rgbList = Image.rgb_list
         def getRgb(path):
             r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
             return (r, g, b)

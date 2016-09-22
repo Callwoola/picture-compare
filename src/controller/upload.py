@@ -4,7 +4,6 @@ import tornado.ioloop
 import tornado.web
 import tornado.template
 from PIL import Image
-from src.module import json_module
 from src import config
 import os
 import StringIO

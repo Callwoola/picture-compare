@@ -1,2 +1,0 @@
-class color():
-    pass

@@ -35,6 +35,9 @@ def config_yaml():
     import yaml
 
     yaml_config = yaml.load(open("./config.yaml"))
+    # 全局可用变量
+    # config = yaml_config
+    
     for key in yaml_config.keys():
         # os.environ[key.upper()]=yaml_config[key]
         if not os.environ.has_key(key.upper()):

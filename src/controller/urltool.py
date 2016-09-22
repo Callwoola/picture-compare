@@ -5,7 +5,6 @@ import tornado.web
 import tornado.gen
 import tornado.template
 import json, time, os, uuid
-from src.module import json_module
 import hashlib
 from src import config
 

@@ -5,75 +5,30 @@ import tornado.web
 import tornado.template
 import json
 import StringIO
-from src.module import json_module
 from src import config
-from src.adapter import db
+
 import hashlib, time, os
+from src.lib.manage import Manage
+# 对比管理程序
+from src.service.match import Match
+import urllib2
+from src.core.app import App
 
-
-class pcHandler(tornado.web.RequestHandler):
-    """
-    picture compare
-    RESTFUL api style
-    """
-
-    def get(self, type):
-        # db.pcDB
-        self.set_header('Content-Type', 'application/json')
-        jsonM = json_module.json_module()
-        self.write(jsonM.set('status', 'error').set('msg','post json').get())
-
+class pcHandler(App):
     def post(self, type):
-        '''
-        :param type:
-        :return:
-        '''
-        self.set_header('Content-Type', 'application/json')
-        # headers = self.request.headers
-        type = self.get_argument("type")
-        if type in ("json", "path", "url", "data"):
-            if type == 'json':
-                getJson = self.request.body
-                jsonM = json_module.json_module()
-                try:
-                    import urllib2
-                    jsondata = json.loads(getJson)
-                    ret = urllib2.urlopen(jsondata['query']['url']).read()
-                    m = hashlib.md5()
-                    m.update(str(time.time()))
-                    section_list=jsondata['query']['url'].split('.')
-                    terms = []
-                    try:
-                        terms = jsondata['terms']
-                    except:
-                        pass
-                    tmp_name = os.environ[config.PROJECT_DIR] + 'img/tmp/' + m.hexdigest() + section_list[-1]
-                    output = open(tmp_name, 'wb')
-                    output.write(ret)
-                    output.close()
+        # way = self.get_argument("type")
 
-                    # if ret.code == 200:
-                    ''' there is processing img and return img list '''
-                    from src.service.compare import Compare
-                    compareDict = Compare().setCompareImage(tmp_name, terms)
+        # if way != 'json':
+        #     raise Exception('method incorrect!')
 
-                    # print compareDict
-                    self.write(jsonM
-                               .set('status', 'OK')
-                               .set('data', compareDict)
-                               .get())
-                except Exception, e:
-                    print e
-                    self.write(jsonM
-                               .set('status', 'error')
-                               .set('msg', 'json format error!')
-                               .get())
-            if type in ("path", "url", "data"):
-                ''' get post image file '''
-                self.write(
-                    jsonM
-                    .set('status', 'error')
-                    .set('msg', 'waiting')
-                    .get()
-                )
-                pass
+        getJson = self.request.body
+        jsondata = json.loads(getJson)
+
+        # 储存对比图片到 redis 
+        Manage().store_base_image(jsondata['query']['url'])
+        terms = jsondata['terms']
+
+        # 开始比对
+        resultDict = Match().setCompareImage(terms)
+
+        self.result(resultDict)

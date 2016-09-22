@@ -5,16 +5,41 @@ import tornado.web
 import tornado.gen
 import tornado.template
 import json, time, os, uuid
-from src.module import json_module
 import hashlib
 from src import config
 from tornado import gen
-from tinydb import TinyDB, where
-
+# from tinydb import TinyDB, where
+from src.service.data import Data
 
 class App(tornado.web.RequestHandler):
     SUPPORTED_METHODS = ("CONNECT", "GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
-    def __init__(self):
-        super()
+    # def __init__(self, application, request, **kwargs):
+    #     super(tornado.web.RequestHandler, self).__init__(*request,**kwargs)
+    def __init__(self, *request, **kwargs):
+        super(App, self).__init__(request[0], request[1])
+        # super()
+    #     super()
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+
+        self.set_header('Content-Type', 'application/json')
+        # headers = self.request.headers
+        self.data = Data()
+
+    # 数据结果
+    def result(self, resultDict = []):
+        # print compareDict
+        self.write(self.data
+                   .set('status', 'OK')
+                   .set('data', resultDict)
+                   .get())
+
+    """
+    picture compare
+    RESTFUL api style
+    """
+    def get(self, type):
+        # db.pcDB
+        self.set_header('Content-Type', 'application/json')
+        jsonM = json_module.json_module()
+        self.write(jsonM.set('status', 'error').set('msg','post json').get())

@@ -3,12 +3,14 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from src.lib import Image
-from src.lib import Manage
-from src.lib import Compare
+from src.lib.image import Image
+from src.lib.feature import Feature as Compare
+from src.lib.manage import Manage as Manage
 from src import config
 import os
-
+import StringIO
+from PIL import Image as im
+import glob
 
 class HomeHandler(tornado.web.RequestHandler):
     def get(self):
@@ -20,14 +22,13 @@ class HomeHandler(tornado.web.RequestHandler):
 
 class DemoHandler(tornado.web.RequestHandler):
     def get(self):
-        import os
 
         os.chdir(os.environ[config.PROJECT_DIR])
         loader = tornado.template.Loader(os.environ[config.TEMPLATE])
-        image = Image.Image()
-        compare = Compare.Image()
+        # image = Image()
+        compare = Compare()
         packages = ["img1/", "img2/", "img4/"]
-        manage = Manage.Manage()
+        manage = Manage()
         package_image = []
         for package in packages:
             # --------------------------
@@ -48,7 +49,7 @@ class DemoHandler(tornado.web.RequestHandler):
                 images[i]['code2'] = compare.mse()
                 images[i]['code3'] = compare.perceptualHash()
                 images[i]['code4'] = compare.colorCompare()
-                images[i]['color'] = image.getRgbaString(images[i]['path'])
+                images[i]['color'] = Image().getRgbaString(images[i]['path'])
                 compare.end()
                 # images[i]['code3'] = Compare.correlate2d()
             package_image.append(images)
@@ -76,22 +77,21 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
     """
 
     def post(self):
-        import StringIO
-        from PIL import Image
-        from src.lib import Manage
-        from src.lib import Compare
-        import os
-        from src.lib import Image as ImageTool
-        import glob
 
-        try:
+        # from PIL import Image
+        # from src.lib import Manage
+        # from src.lib import Compare
+        # import os
+        # from src.lib import Image as ImageTool
+        # try:
+        if 1:
             os.chdir(os.environ[config.PROJECT_DIR] + "tests/tmp/")
             for i in glob.glob('*'):
                 if '.py' not in i:
                     os.remove(i)
                     pass
-            imagetool = ImageTool.Image()
-            compare = Compare.Image()
+            imagetool = Image()
+            compare = Compare()
             imgfiles = self.request.files['file_img']
             if len(imgfiles) > 1:
                 return self.write("error")
@@ -104,11 +104,11 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
 
             tmp_image = tmp + filename
             print tmp_image
-            Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
+            im.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
 
             path = os.environ[config.PROJECT_DIR] + "tests/img/"
             # start compare imgs
-            manage = Manage.Manage()
+            manage = Manage()
             results = []
             # ------------------------------------------
             # result must got to sort and set size
@@ -147,9 +147,9 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
                 results_code4=results_code4,
                 results_mix=results_mix,
             ))
-        except Exception, e:
-            print e
-            self.redirect('search')
+        # except Exception, e:
+        #     print e
+        #     self.redirect('search')
 
 
 class DemoSearchColorHandler(tornado.web.RequestHandler):
@@ -168,17 +168,16 @@ class DemoUploadSearchColorHandler(tornado.web.RequestHandler):
     """
     TODO search test
     """
-
     def post(self):
-        import StringIO
-        from PIL import Image
-        from src.lib import Compare
-        import os
-        from src.lib import Image as ImageTool
-        from src.module import rgbList
+        from src.lib.image import Image as ImageTool
 
-        imagetool = ImageTool.Image()
-        compare = Compare.Image()
+        rgbList = ImageTool.rgb_list
+        
+        from src.lib.feature import Feature as Compare
+
+
+        imagetool = ImageTool()
+        compare = Compare()
         imgfiles = self.request.files['file_img']
 
         if len(imgfiles) > 1:
@@ -189,17 +188,21 @@ class DemoUploadSearchColorHandler(tornado.web.RequestHandler):
 
         tmp = os.environ[config.PROJECT_DIR] + "tests/tmp/"
         tmp_image = tmp + filename
-        Image.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
+        im.open(StringIO.StringIO(imgfile['body'])).save(tmp_image)
         filename = imgfile['filename'].strip()
         results = []
 
-        list = Compare.Image().findSameColor(
-            ImageTool.Image().getRgb(tmp_image), True)
+        list = Compare().findSameColor(
+            ImageTool().getRgb(tmp_image),
+            True
+        )
 
         list = sorted(list, key=lambda k: k['score'])
-        self.write(tornado.template.Loader(os.environ[config.TEMPLATE]).load("search_color_result.html").generate(
-            origin_img=filename,
-            origin_img_rgb=ImageTool.Image().getRgbString(tmp_image),
-            results=list,
-        ))
+        self.write(
+            tornado.template.Loader(os.environ[config.TEMPLATE]).load("search_color_result.html").generate(
+                origin_img=filename,
+                origin_img_rgb=ImageTool().getRgbString(tmp_image),
+                results=list,
+            )
+        )
         pass
