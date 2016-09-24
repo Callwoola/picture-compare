@@ -2,8 +2,9 @@
 import math
 import operator
 from PIL import Image as im
+from src.detectors.phash import Phash
 
-# 算法特征
+# 方向 base 的数据其实只需要提取一次啊, 囧~~
 class Feature:
     '''
     Compare Image differ  I find some useful function
@@ -20,14 +21,38 @@ class Feature:
     image_a_binary = None
     image_b_binary = None
 
-    def __init__(self, A=None, B=None):
-        # image A is String of path
-        # image B is String of path
-        pass
+
+    detector = {}
+    
+    def __init__(self):        
+        self.__reg(Phash())
+
+
+    def __reg(self, instance_name = None):
+        self.detector[
+            instance_name.get_name()
+        ] = instance_name
+
+    def process(self, detector_list = []):
+        result = {}
+
+        for i in self.detector:
+            if i in detector_list:
+                result[i] = self.detector[i].calculate(
+                    self.byte_base,
+                    self.byte_storage
+                )
+
+        return result
 
     # 使用比特码对比
     byte_base = None
     byte_storage = None
+
+    # 算法特征
+    # 将原对比图片 预先出错 , 避免 重复计算
+    base_image_trait_for_image = None
+    base_image_trait_for_cv = None    
 
     def set_byte_base_image(self, byte):
         self.byte_base = byte
@@ -43,6 +68,7 @@ class Feature:
         self.image_a_path = path
 
 
+        
     def set_a_source(self, data):
         ''' set a binary variable
         :param data:
@@ -141,28 +167,6 @@ class Feature:
         self.value_of_phash = rms
         return rms
 
-    # ----------------------------------------------------------
-    # base
-    # 算法 -> 直方图比较
-    # ----------------------------------------------------------
-    def _base(self):
-        image1 = im.open(self.byte_base)
-        image2 = im.open(self.byte_storage)
-
-        if not image1.size is image2.size:
-            image2 = image2.resize(image1.size)
-        pass
-        h1 = image1.convert('RGB').histogram()
-        h2 = image2.convert('RGB').histogram()
-
-        rms = math.sqrt(
-            reduce(operator.add, list(map(lambda a, b: (a - b) ** 2, h1, h2)))
-            /
-            len(h1)
-        )
-        self.value_of_phash = rms
-        return rms
-
     
     # ----------------------------------------------------------
     # correlate2d
@@ -172,8 +176,9 @@ class Feature:
     # NOTE: the two images must have the same dimension
     # ----------------------------------------------------------
     def correlate2d(self):
-        """So fucking slow
-        :return: float
+        """
+        : So fucking slow
+        : return: float
         """
         import scipy as sp
         from scipy.misc import imread
@@ -253,31 +258,6 @@ class Feature:
         value = hamming(a, b)
         self.value_of_perceptualHash = value
         return value
-
-    # ----------------------------------------------------------
-    # Mixom Hash
-    # 混合 hash 算法
-    # ----------------------------------------------------------
-    def mixHash(self):
-        '''
-        get a mix score
-        :return:
-        '''
-        return self.value_of_mse
-    
-        if not self.value_of_mse is None and \
-                not self.value_of_perceptualHash is None and \
-                not self.value_of_phash is None and \
-                not self.value_of_phash is None:
-            return self.value_of_perceptualHash * 1000 + \
-                   self.value_of_phash * 1.5 + \
-                   self.value_of_mse * 0.8 + \
-                   self.value_of_colorCompare * 1.1
-        return None
-        # --------------------
-        # waiting ...
-        # color value
-        pass
 
     # ----------------------------------------------------------
     # color compare

@@ -7,12 +7,12 @@ import StringIO
 from tinydb import TinyDB,where
 from src import config
 from PIL import Image as im
-from src.service.data import Data
+from src.lib.data import Data
 # from src import config
 
 
 class Manage:
-    image_size = (100,100)
+    image_size = (20,20)
 
     divided = '--@@--'
 
@@ -25,12 +25,18 @@ class Manage:
         _host = '192.168.10.10' #os.environ[config.REDIS]['host']
         _port = '6379' #os.environ[config.REDIS]['port']
         _db = 1 #os.environ[config.REDIS]['db']
-
+        import time
+        b = time.time()
         self.r = redis.Redis(
             host = _host,
             port = _port,
             db = _db
         )
+
+        a = time.time()
+
+        print 'time for redis:' ,  str(a-b)
+        
 
     def all(self):
         db = TinyDB(os.environ[config.STORAGE_INDEX_DB])
@@ -219,7 +225,7 @@ class Manage:
                 im_instance \
                     .convert('RGB') \
                     .save(output, 'JPEG')
-                
+
                 string = Data(data).to_string()
 
                 value = string + \
@@ -231,7 +237,7 @@ class Manage:
         return False
 
     base_image_name = 'base_image_name'
-    
+
     def store_base_image(self, image  = ''):
         res = urllib2.urlopen(image)
         if res.code == 200:

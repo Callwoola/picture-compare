@@ -1,16 +1,18 @@
 # coding:utf-8
+import os
+import glob
+import StringIO
 import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from src.lib.image import Image
-from src.lib.feature import Feature as Compare
-from src.lib.manage import Manage as Manage
-from src import config
-import os
-import StringIO
 from PIL import Image as im
-import glob
+
+from src import config
+from src.lib.image import Image
+from src.service.feature import Feature as Compare
+from src.service.manage import Manage as Manage
+
 
 class HomeHandler(tornado.web.RequestHandler):
     def get(self):
@@ -55,11 +57,12 @@ class DemoHandler(tornado.web.RequestHandler):
             package_image.append(images)
 
         html = loader.load("demo.html") \
-            .generate(images=images,
-                      packages=packages,
-                      package_image=package_image,
-                      COMPARE_IMG=os.environ[config.STATIC_DIR] + os.environ[config.TEST_COMPARE_IMG]
-                      )
+                     .generate(
+                         images=images,
+                         packages=packages,
+                         package_image=package_image,
+                         COMPARE_IMG=os.environ[config.STATIC_DIR] + os.environ[config.TEST_COMPARE_IMG]
+                     )
         self.write(html)
 
 

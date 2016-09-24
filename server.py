@@ -1,13 +1,13 @@
 # coding:utf-8
+import os
 import tornado
 import tornado.web
 import tornado.template
-from src import (config, routes)
-import os
 import tornado.web
 import tornado.ioloop
 import tornado.httpserver
 from tornado.options import define, options
+from src import (config, routes)
 
 
 

@@ -13,4 +13,5 @@ pillow==2.9.0
 tinydb==2.3.2
 # toro==0.8 #  tornado 的队列工具
 pyyaml==3.12
-redis==2.10.5
+# redis==2.10.5
+tornado-redis==2.4.18

@@ -1,19 +1,19 @@
 # coding:utf-8
+import hashlib
+import json, time, os, uuid
 import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.gen
 import tornado.template
-import json, time, os, uuid
-from src.service.data import Data
-import hashlib
 from src import config
+from src.lib.data import Data
 
 # from tornado import queues
 from tornado import gen
 
 from tinydb import TinyDB, where
-from src.lib.manage import Manage
+from src.service.manage import Manage
 
 class BuildIndexHandler(tornado.web.RequestHandler):
     """

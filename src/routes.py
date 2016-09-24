@@ -3,7 +3,7 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from src.controller import (demo,compare,upload,bindex,urltool,mix,home)
+from src.handler import (demo,compare,bindex,home)
 import os
 
 def getRoutes(config):
@@ -22,25 +22,28 @@ def getRoutes(config):
         # ---------------------------------------------
         # static url
         # ---------------------------------------------
-        (r'/img/(.*)', tornado.web.StaticFileHandler, {'path': os.environ[config.STATIC_DIR]}),
-        (r'/tests/(.*)', tornado.web.StaticFileHandler, {'path': os.environ[config.PROJECT_DIR]+"/tests/"}),
+        # (r'/img/(.*)', tornado.web.StaticFileHandler, {'path': os.environ[config.STATIC_DIR]}),
+        # (r'/tests/(.*)', tornado.web.StaticFileHandler, {'path': os.environ[config.PROJECT_DIR]+"/tests/"}),
 
         # ---------------------------------------------
-        # supply restful api just like elasticsearch
+        # index
         # ---------------------------------------------
         # (r'/_search/json/(.*)', search.JsonHandler),
-        (r'/_pc(.*)',compare.pcHandler),
-        (r'/_upload(.*)',upload.UploadHandler),
-        (r'/_mix(.*)',mix.MixHandler),
+        # (r'/_upload(.*)',upload.UploadHandler),
+        # (r'/_mix(.*)',mix.MixHandler),
         # (r'/_color(.*)',compare.pcHandler),
         (r'/_index(.*)',bindex.BuildIndexHandler),
         (r'/_add(.*)', bindex.AddHandler),
         (r'/_delete(.*)', bindex.CleaerIndexHandler),
 
+
+        # picture compare api
+        (r'/_pc(.*)',compare.pcHandler),
+
         # ---------------------------------------------
         # other tool url
         # ---------------------------------------------
-        (r'/crossdomain.xml',urltool.urltoolHandler),
+        # (r'/crossdomain.xml',urltool.urltoolHandler),
         
         # ---------------------------------------------
         # home dashboard url

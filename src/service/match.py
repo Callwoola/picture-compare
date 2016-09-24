@@ -1,9 +1,9 @@
 # coding:utf-8
 
-from src.lib.feature import Feature
-from src.lib.manage import Manage
-from src.service.data import Data
-# from src.core.app import App
+from src.lib.data import Data
+from src.service.feature import Feature
+from src.service.manage import Manage
+
 
 class Match:
     '''
@@ -28,33 +28,90 @@ class Match:
         '_color',
     ]
 
-    def setCompareImage(self, terms=None, limit=10, sort="score"):
+    def __init__(self):
+        """
+        设置 管理器
+        """
+        self.manage = Manage()
+        self.feature = Feature()
+
+    
+    def set_origin_image(self, image_url = ''):
+        # 设置原图片索引
+        self.manage.store_base_image(image_url)
+
+
+    # ----------------------------------------------------------
+    # Mixom Hash
+    # 混合 hash 算法
+    # ----------------------------------------------------------
+    def mixHash(self, score_list = {}):
+        '''
+        :get a mix score
+        :return:
+        '''
+        mse = 0
+        phash = 0
+        base = 0
+        color = 0
+        for detector in score_list:
+            # if detector is 'Phash':
+            #     phash = score_list[detector] * 1000
+            if detector is 'Phash':
+                phash = score_list[detector] * 1000
+            if detector is 'Base':
+                phash = score_list[detector] * 1.5
+            if detector is 'Mse':
+                phash = score_list[detector] * 0.8
+            if detector is 'Color':
+                phash = score_list[detector] * 1.1
+
+        return (mse + phash + base + color)
+
+    def get_match_result(self, terms = None, limit=10):
         '''
         :param data:
         :return: list | None
         '''
-        ''' get all image list '''
-        m = Manage()
-        the_list = m.search(terms)
-        compare = Feature()
+
+        import time
+
+        the_list = self.manage.search(terms)
+        compare = self.feature
         results = []
+        print len(the_list)
+        bb = time.time()
         for key in the_list:
-            print key
+            # print key
             # 找到比对数据
             compare.set_byte_base_image(
-                m.get_base_image()
+                self.manage.get_base_image()
             )
-            data, byte = m.get_image_with_data(key)
+
+            data, byte = self.manage.get_image_with_data(key)
 
             compare.set_byte_storage_image(byte)
 
             bean = Data().loads(data)
 
-            # 开始比对
-            for feature in self.include_feature:
-                getattr(compare, feature)()
 
-            score = compare.mixHash()
+            b = time.time()
+
+            result = {}
+            result = compare.process([
+                'Phash'
+            ])
+
+            score = self.mixHash(result)
+            a = time.time()
+            
+            print 'time:' ,  str(a-b)
+
+            # # 开始比对
+            # for feature in self.include_feature:
+            #     getattr(compare, feature)()
+
+            # score = compare.mixHash()
 
             # 准备返回数据
             processed = {}
@@ -69,15 +126,15 @@ class Match:
         sortedList = sorted(results, key=lambda k: k['score'])
         sortedList = sortedList[:limit]
         item_id = 0
-        
+
         for i in range(0,len(sortedList)):
             # print results[i]['score']
             sortedList[i]['score'] = item_id
             item_id += 1
+
+        aa = time.time()
+        print 'totle time:' ,  str(aa-bb)
         return sortedList
-        # except Exception, e:
-        #     print e
-        # return None
 
     def setCompareImageBak(self, path=None, terms=None, limit=10, sort="score"):
         '''
