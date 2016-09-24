@@ -1,5 +1,6 @@
 # coding:utf-8
 import os
+import redis
 import tornado
 import tornado.web
 import tornado.template
@@ -69,6 +70,20 @@ class Application(tornado.web.Application):
             login_url="/login",
             debug=True,                  #调试模式
         )
+        # config redis connection server
+        # self.r = redis.StrictRedis(host='192.168.10.10')
+        # print server.config
+        _host = '192.168.10.10' #os.environ[config.REDIS]['host']
+        _port = '6379' #os.environ[config.REDIS]['port']
+        _db = 1 #os.environ[config.REDIS]['db']
+
+        self.r = redis.Redis(
+            host = _host,
+            port = _port,
+            db = _db
+        )
+
+        # 初始化  redis 
         # 服务器初始化
         tornado.web.Application.__init__(self, handlers=route, **settings)
 
@@ -82,5 +97,4 @@ def main():
                   .start()
 # main run
 if __name__ == "__main__":
-    main()
-        
+    main()      

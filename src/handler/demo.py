@@ -48,7 +48,7 @@ class DemoHandler(tornado.web.RequestHandler):
 
                 compare.start()
                 images[i]['code'] = compare.basehash()
-                images[i]['code2'] = compare.mse()
+                images[i]['code2'] = compare.basehash()
                 images[i]['code3'] = compare.perceptualHash()
                 images[i]['code4'] = compare.colorCompare()
                 images[i]['color'] = Image().getRgbaString(images[i]['path'])
@@ -176,7 +176,7 @@ class DemoUploadSearchColorHandler(tornado.web.RequestHandler):
 
         rgbList = ImageTool.rgb_list
         
-        from src.lib.feature import Feature as Compare
+        from src.service.feature import Feature as Compare
 
 
         imagetool = ImageTool()

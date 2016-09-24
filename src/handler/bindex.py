@@ -39,7 +39,10 @@ class BuildIndexHandler(tornado.web.RequestHandler):
         # 需要参与搜索的字段
         __search = jsondata['query']['search']
 
-        Manage().index_image(
+        # 直接使用  application 的 redis 初始化
+        Manage(
+            self.application.r
+        ).index_image(
             __id,
             __search,
             __data,

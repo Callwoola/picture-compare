@@ -2,7 +2,6 @@
 import os
 import urllib2
 import io
-import redis
 import StringIO
 from tinydb import TinyDB,where
 from src import config
@@ -18,24 +17,15 @@ class Manage:
 
     r = None
 
-    def __init__(self):
-        # config redis connection server
-        # self.r = redis.StrictRedis(host='192.168.10.10')
-        # print server.config
-        _host = '192.168.10.10' #os.environ[config.REDIS]['host']
-        _port = '6379' #os.environ[config.REDIS]['port']
-        _db = 1 #os.environ[config.REDIS]['db']
-        import time
-        b = time.time()
-        self.r = redis.Redis(
-            host = _host,
-            port = _port,
-            db = _db
-        )
+    def __init__(self, redis = None):
+        # import time
+        # b = time.time()
+        # 如今已经不需要 redis 的初始化时间了 叼
+        self.r = redis
 
-        a = time.time()
+        # a = time.time()
 
-        print 'time for redis:' ,  str(a-b)
+        # print 'time for redis:' ,  str(a-b)
         
 
     def all(self):
