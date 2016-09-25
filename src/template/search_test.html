@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title>just show test image</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.27/vue.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <script>
+     new Vue({
+         el: '#app',
+         data: {
+             message: 'Hello Vue.js!'
+         }
+     })
+    </script>
+<header>
+    <a href="/demo">Home</a>
+</header>
+<div>
+    {% for result in results %}
+    <li>
+        <img style="width:60px;height:60px;" src="{{ origin_img }}"/>
+        <img src="{{ result['origin_url'] }}" style="width:60px;height:60px;"/>
+
+        <span>{{ result['name'] }}</span> //
+    </li>
+    {% end %}
+</div>
+</body>
+</html>

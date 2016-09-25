@@ -11,6 +11,7 @@ import tornado.template
 
 from src import config
 from src.lib.data import Data
+from src.service.manage import Manage
 
 class App(tornado.web.RequestHandler):
     SUPPORTED_METHODS = ("CONNECT", "GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
@@ -23,9 +24,13 @@ class App(tornado.web.RequestHandler):
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
 
-        self.set_header('Content-Type', 'application/json')
+        # self.set_header('Content-Type', 'application/json')
         # headers = self.request.headers
         self.data = Data()
+
+        self.m = Manage(
+            self.application.r
+        )
 
     # 数据结果
     def result(self, resultDict = []):

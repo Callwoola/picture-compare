@@ -10,10 +10,11 @@ import tornado.template
 from src import config
 from src.core.app import App
 from src.service.match import Match # 对比管理程序
-from src.service.manage import Manage
+
 
 class pcHandler(App):
     def post(self, type):
+        self.set_header('Content-Type', 'application/json')
         # way = self.get_argument("type")
 
         # if way != 'json':
@@ -23,10 +24,15 @@ class pcHandler(App):
         jsondata = json.loads(getJson)
 
         # 储存对比图片到 redis 
-        Manage().store_base_image(jsondata['query']['url'])
-        terms = jsondata['terms']
+        self.m.store_base_image(jsondata['query']['url'])
 
+        try:
+            terms = jsondata['terms']
+        except:
+            terms = None
         # 开始比对
-        resultDict = Match().get_match_result(terms)
+        resultDict = Match(
+            self.m
+        ).get_match_result(terms)
 
         self.result(resultDict)

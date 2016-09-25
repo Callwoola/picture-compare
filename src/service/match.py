@@ -28,11 +28,11 @@ class Match:
         '_color',
     ]
 
-    def __init__(self):
+    def __init__(self, Manage = None):
         """
         设置 管理器
         """
-        self.manage = Manage()
+        self.manage = Manage
         self.feature = Feature()
 
     
@@ -77,6 +77,9 @@ class Match:
         import time
 
         the_list = self.manage.search(terms)
+
+        if Manage.base_image_name in the_list:
+            the_list.remove(Manage.base_image_name)
         compare = self.feature
         results = []
         print len(the_list)

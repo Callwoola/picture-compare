@@ -76,7 +76,8 @@ class Application(tornado.web.Application):
         _host = '192.168.10.10' #os.environ[config.REDIS]['host']
         _port = '6379' #os.environ[config.REDIS]['port']
         _db = 1 #os.environ[config.REDIS]['db']
-
+        # 需要认真阅读这里的文章
+        # https://mirrors.segmentfault.com/itt2zh/ch4.html
         self.r = redis.Redis(
             host = _host,
             port = _port,

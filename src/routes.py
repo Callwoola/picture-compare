@@ -18,6 +18,7 @@ def getRoutes(config):
         (r"/search_color", demo.DemoSearchColorHandler),
         (r"/upload_search", demo.DemoUploadSearchHandler),
         (r"/upload_search_color", demo.DemoUploadSearchColorHandler),
+        (r"/search_test", demo.TestHandler),
 
         # ---------------------------------------------
         # static url

@@ -21,6 +21,7 @@ class Manage:
         # import time
         # b = time.time()
         # 如今已经不需要 redis 的初始化时间了 叼
+        print redis
         self.r = redis
 
         # a = time.time()
@@ -240,6 +241,15 @@ class Manage:
 
             self.r.set(self.base_image_name, output.getvalue())
 
+    def store_base_image_file(self, image  = ''):
+        im_instance = im.open(image).resize(self.image_size)
+        output = StringIO.StringIO()
+        im_instance \
+            .convert('RGB') \
+            .save(output, 'JPEG')
+
+        self.r.set(self.base_image_name, output.getvalue())
+            
     def get_base_image(self):
         result = self.r.get(self.base_image_name)
         return io.BytesIO(result)
@@ -267,8 +277,11 @@ class Manage:
     # ---------------------------------------------------------
     def search(self, terms = None):
         # 生成短名称
-        key_name = self.__generate_key(
-            terms.keys(),
-            terms
-        )
-        return self.r.keys("*" + key_name + '*')
+        if terms:
+            key_name = self.__generate_key(
+                terms.keys(),
+                terms
+            )
+            return self.r.keys('*' + key_name + '*')
+        else:
+            return self.r.keys('*')
