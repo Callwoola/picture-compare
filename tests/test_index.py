@@ -5,21 +5,21 @@ import requests
 
 url = "http://localhost:5555/_index"
 def index(id, name, image_url):
-    payload = '''{
-        "query":{
-            "id":%s,
-            "name":%s,
-            "url":"http://pms.dmc.app/test/%s",
-            "search" : ["root_category","leaf_category"],
-            "data" : {
-                "root_category":1,
-                "leaf_category":2,
-                "origin_url":"http://pms.dmc.app/test/%s"
-            }
-        }
-    }'''
+    # payload = '''{
+    #     "query":{
+    #         "id":%s,
+    #         "name":%s,
+    #         "url":"http://120.25.56.146/test/%s",
+    #         "search" : ["root_category","leaf_category"],
+    #         "data" : {
+    #             "root_category":1,
+    #             "leaf_category":2,
+    #             "origin_url":"http://120.25.56.146/test/%s"
+    #         }
+    #     }
+    # }'''
 
-    payload = "{\n    \"query\":{\n        \"id\" : %s,\n        \"name\" : \"%s\",\n        \"url\" : \"http://pms.dmc.app/test/%s\",\n        \"search\" : [\n    \t\t\"root_category\",\n    \t\t\"leaf_category\"\n        ],\n        \"data\" : {\n            \"root_category\":\"1\",\n            \"leaf_category\":\"2\",\n       \"origin_url\":\"http://pms.dmc.app/test/%s\"      }\n    }\n}    \n"
+    payload = "{\n    \"query\":{\n        \"id\" : %s,\n        \"name\" : \"%s\",\n        \"url\" : \"http://120.25.56.146/test/%s\",\n        \"search\" : [\n    \t\t\"root_category\",\n    \t\t\"leaf_category\"\n        ],\n        \"data\" : {\n            \"root_category\":\"1\",\n            \"leaf_category\":\"2\",\n       \"origin_url\":\"http://120.25.56.146/test/%s\"      }\n    }\n}    \n"
     
     payload = payload % (id, name, image_url, image_url)
 

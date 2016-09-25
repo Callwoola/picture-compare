@@ -160,7 +160,7 @@ class TestHandler(App):
     def get(self, *args, **kwargs):
         self.write(
             tornado.template.Loader(os.environ[config.TEMPLATE]).load("search_test_upload.html").generate(
-                name='基本搜索测试',
+                name='search by index',
                 action='search_test'
             )
         )
