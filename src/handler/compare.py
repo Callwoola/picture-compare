@@ -24,7 +24,7 @@ class pcHandler(App):
         jsondata = json.loads(getJson)
 
         # 储存对比图片到 redis 
-        self.m.store_base_image(jsondata['query']['url'])
+        self.manage.store_base_image(jsondata['query']['url'])
 
         try:
             terms = jsondata['terms']
@@ -32,7 +32,7 @@ class pcHandler(App):
             terms = None
         # 开始比对
         resultDict = Match(
-            self.m
+            self.manage
         ).get_match_result(terms)
 
         self.result(resultDict)

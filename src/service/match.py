@@ -1,9 +1,74 @@
 # coding:utf-8
 
+import io
+import json
 from src.lib.data import Data
 from src.service.feature import Feature
 from src.service.manage import Manage
+import multiprocessing as mp
+from multiprocessing import Pool
+from functools import partial
 
+def mix_hash(score_list = {}):
+    '''
+    : merge image score
+    '''
+    mse = 0
+    phash = 0
+    base = 0
+    color = 0
+    for detector in score_list:
+        if detector is 'Phash':
+            phash = score_list[detector] * 1000
+        if detector is 'Base':
+            base = score_list[detector] * 1.5
+        if detector is 'Mse':
+            mse = score_list[detector] * 0.8
+        if detector is 'Color':
+            color = score_list[detector] * 1.1
+
+    return (mse + phash + base + color)
+
+
+def process_match(origin_io=None, lists=None):
+    '''
+    : match image by different process
+    '''
+    feature = Feature()
+    data = Data()
+
+    # print lists
+    results = []
+
+    # 直接返回 redis row data
+    for container in lists:
+        # 找到比对数据
+        feature.set_byte_base_image(origin_io)
+
+        # 风格数据
+        data, image_str = container.split(Manage.divided)
+
+        byte = io.BytesIO(image_str)
+        feature.set_byte_storage_image(byte)
+
+        bean = json.loads(data)
+        result = {}
+        # 使用算法到的
+        result = feature.process([
+            'Phash'
+        ])
+
+        # merge calculate score
+        score = mix_hash(result)
+        # 准备返回数据
+        processed = {}
+
+        for i in bean:
+            processed[i] = bean[i]
+        processed['score'] = score
+
+        results.append(processed)
+    return results
 
 class Match:
     '''
@@ -16,6 +81,9 @@ class Match:
     value_of_phash = None
     value_of_mse = None
     value_of_perceptualHash = None
+
+    # 原对比文件 的 byte 属性
+    origin_io_image = None
 
     include_feature = [
 #        'start',
@@ -34,214 +102,51 @@ class Match:
         """
         self.manage = Manage
         self.feature = Feature()
+        self.data = Data()
+        self.origin_io_image = self.manage.get_base_image()
 
-    
     def set_origin_image(self, image_url = ''):
         # 设置原图片索引
+        if image_url is '':
+            raise Exception('Origin image is empty')
         self.manage.store_base_image(image_url)
-
-
-    # ----------------------------------------------------------
-    # Mixom Hash
-    # 混合 hash 算法
-    # ----------------------------------------------------------
-    def mixHash(self, score_list = {}):
-        '''
-        :get a mix score
-        :return:
-        '''
-        mse = 0
-        phash = 0
-        base = 0
-        color = 0
-        for detector in score_list:
-            # if detector is 'Phash':
-            #     phash = score_list[detector] * 1000
-            if detector is 'Phash':
-                phash = score_list[detector] * 1000
-            if detector is 'Base':
-                phash = score_list[detector] * 1.5
-            if detector is 'Mse':
-                phash = score_list[detector] * 0.8
-            if detector is 'Color':
-                phash = score_list[detector] * 1.1
-
-        return (mse + phash + base + color)
 
     def get_match_result(self, terms = None, limit=10):
         '''
         :param data:
         :return: list | None
         '''
-
-        import time
-
         the_list = self.manage.search(terms)
-
         if Manage.base_image_name in the_list:
             the_list.remove(Manage.base_image_name)
-        compare = self.feature
+
+        for_multiprocess_list = []
+        for_multiprocess_list = self.manage.get_multi(the_list)
+
+        print 'count result:', str(len(the_list))
+
         results = []
-        print len(the_list)
-        bb = time.time()
-        for key in the_list:
-            # print key
-            # 找到比对数据
-            compare.set_byte_base_image(
-                self.manage.get_base_image()
-            )
+        core_number = mp.cpu_count()
 
-            data, byte = self.manage.get_image_with_data(key)
-
-            compare.set_byte_storage_image(byte)
-
-            bean = Data().loads(data)
+        # 计算每个 cpu 需要的数量 (分化数据到每个 cpu )
+        n = int(round(len(for_multiprocess_list) / float(core_number)))
+        divid_list = [for_multiprocess_list[i:i + n] for i in xrange(0, len(for_multiprocess_list), n)]
 
 
-            b = time.time()
+        # Pool的默认大小是CPU
+        pool = Pool()
+        func = partial(process_match, self.origin_io_image)
 
-            result = {}
-            result = compare.process([
-                'Phash'
-            ])
+        # 并得到合并的结果集
+        rl = pool.map(func, divid_list)
+        pool.close()
+        pool.join()
 
-            score = self.mixHash(result)
-            a = time.time()
-            
-            print 'time:' ,  str(a-b)
+        # set two dimension to one dimension
+        results = [item for i in rl for item in i]
 
-            # # 开始比对
-            # for feature in self.include_feature:
-            #     getattr(compare, feature)()
-
-            # score = compare.mixHash()
-
-            # 准备返回数据
-            processed = {}
-
-            for i in bean:
-                processed[i] = bean[i]
-
-            processed['id'] = key.split('#')[1]
-            processed['score'] = score
-
-            results.append(processed)
         sortedList = sorted(results, key=lambda k: k['score'])
         sortedList = sortedList[:limit]
         item_id = 0
 
-        for i in range(0,len(sortedList)):
-            # print results[i]['score']
-            sortedList[i]['score'] = item_id
-            item_id += 1
-
-        aa = time.time()
-        print 'totle time:' ,  str(aa-bb)
         return sortedList
-
-    def setCompareImageBak(self, path=None, terms=None, limit=10, sort="score"):
-        '''
-        :param data:
-        :return: list | None
-        '''
-        ''' get all image list '''
-        # check data is binary file
-        try:
-            # ------------------------------------------
-            # result must got to sort and set size
-            # maybe add index for quick find image
-
-            the_list = Manage().get_db_list(terms)
-            print the_list
-            compare = compareTool.Image()
-            results = []
-            for bean in the_list:
-                
-                # --------------------------
-                # this is a image buay file
-                compare.setA(path)
-                if bean['type'] == 'url':
-                    compare.setB(bean['map'])
-                else:
-                    compare.setB(bean['addresses'])
-
-                compare.start()
-                # 开始比对
-                for feature in self.include_feature:
-                    getattr(compare, feature)()
-
-                score = compare.mixHash()
-                results.append({
-                    # 'score_basehash': compare.basehash(),
-                    'score': score,
-                    # 'score_image': compare.mse(),
-                    'url': '' if bean['type'] != 'url' else bean['addresses'],
-                    'id': bean['id'],
-                    'data': bean['data'],
-                    'name': bean['name'],
-                })
-            sortedList = sorted(results, key=lambda k: k['score'])
-            sortedList = sortedList[:limit]
-            item_id = 0
-            for i in range(0,len(sortedList)):
-                # print results[i]['score']
-                sortedList[i]['score']=item_id
-                item_id+=1
-            return sortedList
-        except Exception, e:
-            print e
-        return None
-
-
-    # def start(
-    #     self,
-    #     path=None,
-    #     terms=None,
-    #     limit=10,
-    #     sort="score"
-    # ):
-    #     try:
-    #         print 'im here'
-    #         the_list = Manage().get_db_list(terms)
-    #         compare = compareTool.Image()
-    #         results = []
-    #         for bean in the_list:
-    #             compare.setA(path)
-    #             if bean['type'] == 'url':
-    #                 compare.setB(bean['map'])
-    #             else:
-    #                 compare.setB(bean['addresses'])
-    #             compare.start()
-    #             for feature in self.include_feature:
-    #                 getattr(compare, feature)()
-    #             score = compare.mixHash()
-    #             results.append({
-    #                 'score': score,
-    #                 'url': '' if bean['type'] != 'url' else bean['addresses'],
-    #                 'id': bean['id'],
-    #                 'data': bean['data'],
-    #                 'name': bean['name'],
-    #             })
-    #         sortedList = sorted(results, key=lambda k: k['score'])
-    #         sortedList = sortedList[:limit]
-
-    #         # print sortedList
-    #         # print len(sortedList)
-    #         # exit()
-    #         if not len(sortedList) > 0:
-    #             raise Exception('Not match any image!')
-    #         item_id = 0
-    #         for i in range(0,len(sortedList)):
-    #             sortedList[i]['score']=item_id
-    #             item_id+=1
-    #         return sortedList
-        
-    #     except Exception, e:
-    #         print e
-    #     return None
-
-
-    
-    # def getAllList(self):
-    #     # os path
-    #     pass

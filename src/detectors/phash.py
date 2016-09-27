@@ -41,7 +41,7 @@ class Phash(Detector):
 
         # a 需要 静态化
         if self._base_image is None:
-            print 'calculate again'
+            print 'phash calculate again'
             self._base_image = avhash(origin, im)
 
         b = avhash(local, im)

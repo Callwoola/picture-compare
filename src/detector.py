@@ -5,7 +5,6 @@ import io
 # define a base detector Image paser for module
 class Detector:
     _weight = 1
-
     # 储存 原 对比数据, 避免又一次计算
     _base_image = None
     # 注册名称

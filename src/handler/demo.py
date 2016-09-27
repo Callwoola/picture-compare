@@ -23,7 +23,6 @@ class HomeHandler(tornado.web.RequestHandler):
             .load("index.html")
             .generate())
 
-
 class DemoHandler(tornado.web.RequestHandler):
     def get(self):
 
@@ -96,6 +95,7 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
                     os.remove(i)
                     pass
             imagetool = Image()
+
             compare = Compare()
             imgfiles = self.request.files['file_img']
             if len(imgfiles) > 1:
@@ -105,7 +105,6 @@ class DemoUploadSearchHandler(tornado.web.RequestHandler):
             import uuid
             filename = str(uuid.uuid4()) + '.' + filename.split('.')[-1]
             tmp = os.environ[config.PROJECT_DIR] + "tests/tmp/"
-
 
             tmp_image = tmp + filename
             print tmp_image

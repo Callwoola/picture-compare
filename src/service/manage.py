@@ -18,16 +18,8 @@ class Manage:
     r = None
 
     def __init__(self, redis = None):
-        # import time
-        # b = time.time()
-        # 如今已经不需要 redis 的初始化时间了 叼
-        print redis
+        # 如今已经不需要 redis 的初始化了 叼
         self.r = redis
-
-        # a = time.time()
-
-        # print 'time for redis:' ,  str(a-b)
-        
 
     def all(self):
         db = TinyDB(os.environ[config.STORAGE_INDEX_DB])
@@ -285,3 +277,6 @@ class Manage:
             return self.r.keys('*' + key_name + '*')
         else:
             return self.r.keys('*')
+
+    def get_multi(self, keys = []):
+        return self.r.mget(keys)

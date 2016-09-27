@@ -19,16 +19,13 @@ class App(tornado.web.RequestHandler):
     #     super(tornado.web.RequestHandler, self).__init__(*request,**kwargs)
     def __init__(self, *request, **kwargs):
         super(App, self).__init__(request[0], request[1])
-        # super()
-    #     super()
+
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
 
-        # self.set_header('Content-Type', 'application/json')
-        # headers = self.request.headers
         self.data = Data()
 
-        self.m = Manage(
+        self.manage = Manage(
             self.application.r
         )
 
@@ -39,6 +36,9 @@ class App(tornado.web.RequestHandler):
                    .set('status', 'OK')
                    .set('data', resultDict)
                    .get())
+
+    def add_json(self):
+        self.set_header('Content-Type', 'application/json')
 
     """
     picture compare

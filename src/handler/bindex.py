@@ -31,7 +31,6 @@ class BuildIndexHandler(tornado.web.RequestHandler):
 
         jsondata = json.loads(getJson)
 
-        # print jsondata
         __url = jsondata['query']['url']
         __name = jsondata['query']['name']
         __id = jsondata['query']['id']
@@ -39,6 +38,7 @@ class BuildIndexHandler(tornado.web.RequestHandler):
         # 需要参与搜索的字段
         __search = jsondata['query']['search']
 
+        __data['id'] = __id
         # 直接使用  application 的 redis 初始化
         Manage(
             self.application.r

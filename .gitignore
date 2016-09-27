@@ -296,3 +296,5 @@ tests/tmp/*
 
 /venv
 /test/img/*
+*#*
+*~

@@ -30,4 +30,5 @@ class Base(Detector):
             len(h1)
         )
         self.value_of_phash = rms
+
         return rms

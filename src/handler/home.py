@@ -8,6 +8,7 @@ from src import config
 from src.lib.data import Data
 
 class HomeHandler(tornado.web.RequestHandler):
+    # @tornado.web.asynchronous
     def get(self, param):
         self.set_header('Content-Type', 'application/json')
         jsonM = Data()

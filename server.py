@@ -8,26 +8,10 @@ import tornado.web
 import tornado.ioloop
 import tornado.httpserver
 from tornado.options import define, options
+from tornado.ioloop import IOLoop
+
+
 from src import (config, routes)
-
-
-
-def check_self():
-    '''
-    check_self config and dependent
-    :return:
-    '''
-    pass
-
-
-def info(str):
-    '''
-    :param str:
-    :return:
-    '''
-    print str
-
-
 def config_yaml():
     '''
     config the App value
@@ -61,18 +45,25 @@ class Application(tornado.web.Application):
         # urls settings
         # handlers = 
         ''' the setting '''
+        # settings = dict(
+        #     template_path=os.path.join(os.path.dirname(__file__), "webapp/templates"),
+        #     static_path=os.path.join(os.path.dirname(__file__), "webapp/static"),
+        #     # 防跨站伪造请求
+        #     xsrf_cookies=False,
+        #     cookie_secret="test-2001",
+        #     login_url="/login",
+        #     # 调试模式
+        #     debug=True,
+        # )
         settings = dict(
-            template_path=os.path.join(os.path.dirname(__file__), "webapp/templates"),
-            static_path=os.path.join(os.path.dirname(__file__), "webapp/static"),
-            # 防跨站伪造请求
-            xsrf_cookies=False,
-            cookie_secret="test-2001",
-            login_url="/login",
-            debug=True,                  #调试模式
+            autoreload=False,
+            debug=False
         )
-        # config redis connection server
-        # self.r = redis.StrictRedis(host='192.168.10.10')
-        # print server.config
+        # settings = dict(
+        #     autoreload=True,
+        #     debug=True
+        # )
+
         _host = '192.168.10.10' #os.environ[config.REDIS]['host']
         _port = '6379' #os.environ[config.REDIS]['port']
         _db = 1 #os.environ[config.REDIS]['db']
@@ -90,12 +81,20 @@ class Application(tornado.web.Application):
 
 # start run
 def main():
+    # 服务启动的进程
+    num_processes = 1
+    app_port = 5555
+
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(Application())
-    http_server.listen(5555)
-    tornado.ioloop.IOLoop \
-                  .instance() \
-                  .start()
+
+    # listen 可以显式创建创建 http
+    # http_server.listen(app_port)
+    http_server.bind(app_port)
+    http_server.start(num_processes)
+    IOLoop.current().start()
+    # IOLoop.instance().start()
+
 # main run
 if __name__ == "__main__":
     main()      
