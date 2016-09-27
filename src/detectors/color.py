@@ -159,5 +159,4 @@ class Phash(Detector):
             return results
         return results[0]
 
-        pass
 

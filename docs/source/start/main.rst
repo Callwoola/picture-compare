@@ -25,6 +25,30 @@ pictureCompare 是更具图片色彩直方图，以及汉明距离等算法加�
 
 查看演示demo。
 
+
+====
+开始搜索吧!!
+====
+
+url::
+
+    http://<server>:<port>/_
+
+http method::
+
+    post
+
+.. code::
+
+   {
+       "query" : {
+           "url" : "http://i.gzdmc.net/sku/ebe88c67a2fd931878ded89cb1b726ec.jpg@1e_50w_50h_1c_0i_1o_90Q_1x.png"
+       }
+   }
+====
+创建索引
+====
+
 ====
 使用api
 ====

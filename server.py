@@ -56,8 +56,12 @@ class Application(tornado.web.Application):
         #     debug=True,
         # )
         settings = dict(
-            autoreload=False,
-            debug=False
+            template_path = os.path.join(os.path.dirname(__file__), "src/template"),
+            static_path = os.path.join(os.path.dirname(__file__), "src/static"),
+            # autoreload=False,
+            # debug=False,
+            autoreload = True,
+            debug = True
         )
         # settings = dict(
         #     autoreload=True,

@@ -256,3 +256,10 @@ class DemoUploadSearchColorHandler(tornado.web.RequestHandler):
             )
         )
         pass
+
+
+class RestfulHandler(App):
+    def get(self):
+        print 'here'
+        self.render('restful.html')
+        
