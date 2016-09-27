@@ -5,17 +5,18 @@ import tornado.ioloop
 import tornado.web
 import tornado.template
 from src import config
+from src.core.app import App
 from src.lib.data import Data
 
-class HomeHandler(tornado.web.RequestHandler):
+class HomeHandler(App):
     # @tornado.web.asynchronous
     def get(self, param):
         self.set_header('Content-Type', 'application/json')
-        jsonM = Data()
-        result = jsonM \
+        the_list = self.manage.search([])
+        result = self.data \
                  .set('status', 'ok') \
-                 .set('demo_url', '/demo') \
-                 .set('count_data', '0') \
+                 .set('count_data', str(len(the_list))) \
+                 .set('config', self.config) \
                  .get()
         self.write(
             result

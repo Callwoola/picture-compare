@@ -1,17 +1,13 @@
 name: Picture Compare
-template: src/template
-database: None
 project_dir:  None
 static_dir: img/
-test_compare_img: 1.jpg
 
-project_port: 5555
-server_url: http://localhost:5555
-storage_index_db: img/imgdb/img.db
+port: 5555
+binding_host: localhost
 # test
 image_package: [img1, img2, img3 ,img4]
 
 redis:
-  host: 192.168.10.1
+  host: 192.168.10.10
   port: 6379
   db: 1

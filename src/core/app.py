@@ -12,6 +12,7 @@ import tornado.template
 from src import config
 from src.lib.data import Data
 from src.service.manage import Manage
+from src.service.match import Match # 对比管理程序
 
 class App(tornado.web.RequestHandler):
     SUPPORTED_METHODS = ("CONNECT", "GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
@@ -24,9 +25,14 @@ class App(tornado.web.RequestHandler):
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
 
         self.data = Data()
-
+        self.config = self.application.config
         self.manage = Manage(
             self.application.r
+        )
+
+        # 定义 匹配接口
+        self.match = Match(
+            self.manage
         )
 
     # 数据结果

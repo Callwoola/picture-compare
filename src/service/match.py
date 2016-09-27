@@ -85,17 +85,6 @@ class Match:
     # 原对比文件 的 byte 属性
     origin_io_image = None
 
-    include_feature = [
-#        'start',
-        # 'basehash',
-        # 'mse',
-        # 'perceptualHash',
-        # 'colorCompare',
-        '_base',
-        '_phash',
-        '_color',
-    ]
-
     def __init__(self, Manage = None):
         """
         设置 管理器
