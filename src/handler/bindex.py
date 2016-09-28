@@ -6,7 +6,6 @@ import tornado.ioloop
 import tornado.web
 import tornado.gen
 import tornado.template
-from src import config
 from src.lib.data import Data
 
 # from tornado import queues

@@ -9,7 +9,6 @@ import tornado.web
 import tornado.gen
 import tornado.template
 
-from src import config
 from src.lib.data import Data
 from src.service.manage import Manage
 from src.service.match import Match # 对比管理程序

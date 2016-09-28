@@ -4,10 +4,9 @@ import urllib2
 import io
 import StringIO
 from tinydb import TinyDB,where
-from src import config
+
 from PIL import Image as im
 from src.lib.data import Data
-# from src import config
 
 
 class Manage:

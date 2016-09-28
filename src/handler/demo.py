@@ -8,7 +8,6 @@ import tornado.web
 import tornado.template
 from PIL import Image as im
 
-from src import config
 from src.core.app import App
 from src.lib.image import Image
 from src.service.feature import Feature as Compare

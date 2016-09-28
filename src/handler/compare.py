@@ -1,6 +1,5 @@
 # coding:utf-8
 import json
-from src import config
 from src.core.app import App
 
 class pcHandler(App):
@@ -14,8 +13,11 @@ class pcHandler(App):
         getJson = self.request.body
         jsondata = json.loads(getJson)
 
-        # 储存对比图片到 redis 
-        self.manage.store_base_image(jsondata['query']['url'])
+        # 储存对比图片到 redis
+        if 'base64' in jsondata['query'].keys():
+            self.manage.store_base_image_by_base64(jsondata['query']['base64'])
+        else:
+            self.manage.store_base_image(jsondata['query']['url'])
 
         try:
             terms = jsondata['terms']

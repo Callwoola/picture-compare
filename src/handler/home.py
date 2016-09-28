@@ -4,7 +4,6 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.template
-from src import config
 from src.core.app import App
 from src.lib.data import Data
 
