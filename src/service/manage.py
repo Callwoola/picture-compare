@@ -187,7 +187,7 @@ class Manage:
 
         # 每个对象必须要有一个名字
         data['name'] = name
-            
+
         key_name = self.__generate_key(
             search,
             source_data
@@ -241,7 +241,7 @@ class Manage:
             .save(output, 'JPEG')
 
         self.r.set(self.base_image_name, output.getvalue())
-            
+
     def get_base_image(self):
         result = self.r.get(self.base_image_name)
         return io.BytesIO(result)
@@ -274,9 +274,12 @@ class Manage:
                 terms.keys(),
                 terms
             )
+            print key_name
             return self.r.keys('*' + key_name + '*')
         else:
             return self.r.keys('*')
 
     def get_multi(self, keys = []):
-        return self.r.mget(keys)
+        if len(keys) > 0:
+            return self.r.mget(keys)
+        raise Exception('keys is empty!')

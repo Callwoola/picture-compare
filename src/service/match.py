@@ -85,13 +85,14 @@ class Match:
     # 原对比文件 的 byte 属性
     origin_io_image = None
 
-    def __init__(self, Manage = None):
+    def __init__(self, Manage = None, result_size = 10):
         """
         设置 管理器
         """
         self.manage = Manage
         self.feature = Feature()
         self.data = Data()
+        self.result_size = result_size
         self.origin_io_image = self.manage.get_base_image()
 
     def set_origin_image(self, image_url = ''):
@@ -100,11 +101,13 @@ class Match:
             raise Exception('Origin image is empty')
         self.manage.store_base_image(image_url)
 
-    def get_match_result(self, terms = None, limit=10):
+    def get_match_result(self, terms = None):
         '''
         :param data:
         :return: list | None
         '''
+
+        limit = self.result_size
         the_list = self.manage.search(terms)
         if Manage.base_image_name in the_list:
             the_list.remove(Manage.base_image_name)

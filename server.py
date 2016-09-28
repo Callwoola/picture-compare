@@ -24,9 +24,11 @@ def config_yaml():
     if not 'redis' in yaml_config.keys():
         raise Exception('config error not redis config')
     if not 'port' in yaml_config.keys():
-        raise Exception('config error not port config')
+        raise Exception('config error not port key')
     if not 'binding_host' in yaml_config.keys():
-        raise Exception('config error not binding_host config')
+        raise Exception('config error not binding_host key')
+    if not 'result_size' in yaml_config.keys():
+        raise Exception('config error not result_size key')
     # 做检查
     return yaml_config
 

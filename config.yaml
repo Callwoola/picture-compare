@@ -6,8 +6,8 @@ port: 5555
 binding_host: localhost
 # test
 image_package: [img1, img2, img3 ,img4]
-
+result_size: 20
 redis:
-  host: 192.168.10.10
+  host: 120.25.56.146
   port: 6379
-  db: 1
+  db: 3

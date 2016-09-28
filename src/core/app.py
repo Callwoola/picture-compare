@@ -32,9 +32,9 @@ class App(tornado.web.RequestHandler):
 
         # 定义 匹配接口
         self.match = Match(
-            self.manage
+            self.manage,
+            self.config['result_size']
         )
-
     # 数据结果
     def result(self, resultDict = []):
         # print compareDict
@@ -46,12 +46,16 @@ class App(tornado.web.RequestHandler):
     def add_json(self):
         self.set_header('Content-Type', 'application/json')
 
-    """
-    picture compare
-    RESTFUL api style
-    """
-    def get(self, type):
-        # db.pcDB
+    def write_error(self, status_code, **kwargs):
+        '''
+        : 处理失败问题
+        '''
+        self.set_status(500)
         self.set_header('Content-Type', 'application/json')
-        jsonM = json_module.json_module()
-        self.write(jsonM.set('status', 'error').set('msg','post json').get())
+        self.write(
+            self.data
+            .set('status', 'fail')
+            .set('message', 'Not any result be found')
+            .set('data', [])
+            .get()
+        )
