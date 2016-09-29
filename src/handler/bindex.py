@@ -29,7 +29,17 @@ class BuildIndexHandler(tornado.web.RequestHandler):
         getJson = self.request.body
         jsondata = json.loads(getJson)
 
-        __url = jsondata['query']['url']
+        __is_base64 = False
+        __image = None
+        if 'url' in jsondata['query'].keys():
+            __image = jsondata['query']['url']
+        else:
+            __image = jsondata['query']['base64']
+            __is_base64 = True
+
+        if __image is None:
+            raise Exception('image data is empty!')
+
         __name = jsondata['query']['name']
         __id = jsondata['query']['id']
         __data = jsondata['query']['data']
@@ -44,8 +54,9 @@ class BuildIndexHandler(tornado.web.RequestHandler):
             __id,
             __search,
             __data,
-            __url,
-            __name
+            __image,
+            __name,
+            __is_base64
         )
         return self.write(jsonM.setStatus('status', 'OK')
                           .set('msg', str('index success!'))
