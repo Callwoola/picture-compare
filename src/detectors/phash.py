@@ -28,7 +28,7 @@ class Phash(Detector):
                 0
             )
 
-        # 汗明距离
+        # hamming 距离
         def hamming(h1, h2):
             h, d = 0, h1 ^ h2
             while d:

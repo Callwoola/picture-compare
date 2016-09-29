@@ -20,117 +20,6 @@ class Manage:
         # 如今已经不需要 redis 的初始化了 叼
         self.r = redis
 
-    def all(self):
-        db = TinyDB(os.environ[config.STORAGE_INDEX_DB])
-        return db.all()
-
-    # ----------------------------------------------------------
-    # get directory file list
-    # ----------------------------------------------------------
-    def getImageList(self, project_img_path, package_path):
-        '''
-        :param project_img_path:
-        :param package_path:
-        :return:
-        '''
-        import os
-
-        imgList = []
-        for dir_, _, files in os.walk(project_img_path):
-            for fileName in files:
-                imgList.append(
-                    {
-                        "url": package_path + fileName,
-                        "path": project_img_path + fileName,
-                    }
-                )
-        return imgList
-
-    # ----------------------------------------------------------
-    # return the package first file name
-    # ----------------------------------------------------------
-    def getFirst(self, project_img_path):
-        '''
-        :param project_img_path:
-        :return:
-        '''
-        import os
-
-        for dir_, _, files in os.walk(project_img_path):
-            for fileName in files:
-                return fileName
-        return None
-
-    # ----------------------------------------------------------
-    # return path all file pull path name
-    # ---------------------------------------------------------
-    def getPathAllFile(self, PATH):
-        '''
-        :param PATH:
-        :return:
-        '''
-        import os, glob
-
-        pathList = []
-        os.chdir(PATH)
-        for i in glob.glob('*'):
-            pathList.append(os.getcwd() + "/" + i)
-        return pathList
-
-    def add_index_file(self, json, data):
-        # if data ta
-        pass
-
-    # ----------------------------------------------------------
-    # return Tinydb all list
-    # ---------------------------------------------------------
-    def get_db_list(self, terms=None, PATH=None):
-        '''
-        :param PATH:
-        :return:
-        '''
-        db = TinyDB(os.environ[config.STORAGE_INDEX_DB])
-        list = []
-        # multipul condition
-        if len(terms) > 0:
-            condition = None
-            for term_key, term_value in terms.items():
-                # not allow empty condition
-                # print term_key, term_value
-                if not condition is None:
-                    condition = (where('data').has('data').has(term_key) == term_value) & condition
-                else:
-                    condition = (where('data').has('data').has(term_key) == term_value)
-            list = db.search(condition)
-            if len(list) < 10:
-                condition = None
-                for term_key, term_value in terms.items():
-                    # not allow empty condition
-                    # print term_key, term_value
-                    if not condition is None:
-                        condition = (where('data').has('data').has(term_key) == term_value) | condition
-                    else:
-                        condition = (where('data').has('data').has(term_key) == term_value)
-                list = db.search(condition)
-        else:
-            list = db.all()
-        # process result data for reture
-        # print condition
-        results = []
-        for i in list:
-            results.append(
-                {
-                    'name': i['data']['name'],
-                    'map': i['data']['map'],
-                    'selfid': i['id'],
-                    'id': i['data']['id'],
-                    'addresses': i['data']['url'],
-                    'type': 'url',
-                    'data': i['data']['data']
-                }
-            )
-        return results
-
     # 生成短名称 短名称 在前面
     def __genrate_sort_name(self, names = []):
         '''
@@ -230,7 +119,8 @@ class Manage:
                 .convert('RGB') \
                 .save(output, 'JPEG')
 
-            self.r.set(self.base_image_name, output.getvalue())
+            return self.r.set(self.base_image_name, output.getvalue())
+        raise Exception('Image request fail!')
 
     def store_base_image_file(self, image  = ''):
         im_instance = im.open(image).resize(self.image_size)
@@ -241,6 +131,15 @@ class Manage:
 
         self.r.set(self.base_image_name, output.getvalue())
 
+    def remove_base_image_file(self):
+        ''' 删除缓存数据 '''
+        self.r.delete(self.base_image_name)
+
+    def store_base_image_by_base64(self, image = ''):
+        '''
+        : 通过 base64 储存文件
+        '''
+        pass
     def get_base_image(self):
         result = self.r.get(self.base_image_name)
         return io.BytesIO(result)
@@ -273,7 +172,6 @@ class Manage:
                 terms.keys(),
                 terms
             )
-            print key_name
             return self.r.keys('*' + key_name + '*')
         else:
             return self.r.keys('*')

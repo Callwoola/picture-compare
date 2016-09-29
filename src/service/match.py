@@ -93,7 +93,7 @@ class Match:
         self.feature = Feature()
         self.data = Data()
         self.result_size = result_size
-        self.origin_io_image = self.manage.get_base_image()
+
 
     def set_origin_image(self, image_url = ''):
         # 设置原图片索引
@@ -106,9 +106,12 @@ class Match:
         :param data:
         :return: list | None
         '''
+        # 设置原图数据
+        self.origin_io_image = self.manage.get_base_image()
 
         limit = self.result_size
         the_list = self.manage.search(terms)
+        # 删除缓存数据
         if Manage.base_image_name in the_list:
             the_list.remove(Manage.base_image_name)
 
@@ -141,4 +144,7 @@ class Match:
         sortedList = sortedList[:limit]
         item_id = 0
 
+        # 处理 image 在内存里面的数据
+        print 'im here'
+        self.manage.remove_base_image_file()
         return sortedList
