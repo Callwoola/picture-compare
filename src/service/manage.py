@@ -1,8 +1,10 @@
 # coding:utf-8
 import os
-import urllib2
 import io
+import base64
+import urllib2
 import StringIO
+import cStringIO
 from tinydb import TinyDB,where
 
 from PIL import Image as im
@@ -66,7 +68,7 @@ class Manage:
     # ----------------------------------------------------------
     # 向 redis 创建索引
     # ---------------------------------------------------------
-    def index_image(self, id = 0, search = [], data = [], image = '', name = ''):
+    def index_image(self, id = 0, search = [], data = [], image = '', name = '', is_base64 = False):
         # TOOD 需要一个算法 , 将每次 的 search 字段数据 转化为相同的,数据
         # 根据 client 的条件字段创建 的 key
         source_data = {}
@@ -86,24 +88,34 @@ class Manage:
         # 0 -> data
         # 1 -> image - binary
         if image:
-            res = urllib2.urlopen(image)
-            if res.code == 200:
-                # save data into Bytes
-                imimage = io.BytesIO(res.read())
-                # 压缩图片以及,格式化为 JPEG
-                im_instance = im.open(imimage).resize(self.image_size)
-                output = StringIO.StringIO()
-                im_instance \
-                    .convert('RGB') \
-                    .save(output, 'JPEG')
+            if is_base64:
+                # 对于 base64 的处理办法
+                if 'base64,' in image:
+                    image = image.split(',')[1]
+                image_str = cStringIO.StringIO(base64.b64decode(image))
+                im_instance = im.open(image_str).resize(self.image_size)
+            else:
+                # 对于 url 文件的处理办法
+                res = urllib2.urlopen(image)
+                if res.code == 200:
+                    # save data into Bytes
+                    imimage = io.BytesIO(res.read())
+                    # 压缩图片以及,格式化为 JPEG
+                    im_instance = im.open(imimage).resize(self.image_size)
 
-                string = Data(data).to_string()
+            # 不管使用哪种参数方法 最终的结果都是保存 redis
+            output = StringIO.StringIO()
+            im_instance \
+                .convert('RGB') \
+                .save(output, 'JPEG')
 
-                value = string + \
-                        self.divided + \
-                        output.getvalue()
+            string = Data(data).to_string()
 
-                self.r.set(key_name, value)
+            value = string + \
+                    self.divided + \
+                    output.getvalue()
+
+            self.r.set(key_name, value)
             return True
         return False
 
@@ -131,15 +143,26 @@ class Manage:
 
         self.r.set(self.base_image_name, output.getvalue())
 
-    def remove_base_image_file(self):
-        ''' 删除缓存数据 '''
-        self.r.delete(self.base_image_name)
-
     def store_base_image_by_base64(self, image = ''):
         '''
         : 通过 base64 储存文件
         '''
-        pass
+        if 'base64,' in image:
+            image = image.split(',')[1]
+        image_str = cStringIO.StringIO(base64.b64decode(image))
+        im_instance = im.open(image_str).resize(self.image_size)
+        output = StringIO.StringIO()
+        im_instance \
+            .convert('RGB') \
+            .save(output, 'JPEG')
+
+        self.r.set(self.base_image_name, output.getvalue())
+
+    def remove_base_image_file(self):
+        ''' 删除缓存数据 '''
+        self.r.delete(self.base_image_name)
+
+
     def get_base_image(self):
         result = self.r.get(self.base_image_name)
         return io.BytesIO(result)

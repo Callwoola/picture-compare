@@ -8,55 +8,33 @@ class Image:
 
     def __init__(self):
         pass
-    # ----------------------------------------------------------
-    # get picture color rgba
-    # @:return str
-    # ----------------------------------------------------------
-    def getRgbaString(self,path):
-        '''
-        :param path:
-        :return:
-        '''
-        r, g, b, a = im.open(path).convert('RGBA').resize((1, 1)).getcolors()[0][1]
-        return "rgba(%d, %d, %d, %d)" % (r, g, b, a)
 
     # ----------------------------------------------------------
     # get picture color rgba
     # @:return
     # ----------------------------------------------------------
-    def getRgba(self,path):
+    def get_rgba(self, io):
         '''
         :param path:
         :return:
         '''
-        r, g, b, a = im.open(path).convert('RGBA').resize((1, 1)).getcolors()[0][1]
+        r, g, b, a = im.open(io).convert('RGBA').resize((1, 1)).getcolors()[0][1]
         return (r, g, b, a)
 
-    # ----------------------------------------------------------
-    # get picture color rgb
-    # @:return str
-    # ----------------------------------------------------------
-    def getRgbString(self,path):
-        '''
-        :param path:
-        :return:
-        '''
-        r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
-        return "rgb(%d, %d, %d)" % (r, g, b)
 
     # ----------------------------------------------------------
     # get picture color rgb
     # @:return
     # ----------------------------------------------------------
-    def getRgb(self,path):
+    def get_rgb(self, io):
         '''
         :param path:
         :return:
         '''
-        r, g, b = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
+        r, g, b = im.open(io).convert('RGB').resize((1, 1)).getcolors()[0][1]
         return (r, g, b)
 
-    def getHsi(self,path):
+    def get_hsi(self, io):
         '''
         Unfortunately I think that this transformation can not be done
         with Image.convert: you can only do transformations between equivalent
@@ -71,7 +49,7 @@ class Image:
         '''
         import math
 
-        R, G, B = im.open(path).convert('RGB').resize((1, 1)).getcolors()[0][1]
+        R, G, B = im.open(io).convert('RGB').resize((1, 1)).getcolors()[0][1]
 
         I = 1/3 * (R+G+B)
 
@@ -222,7 +200,7 @@ class Image:
         {"maroon": (128, 0, 0)}
     ]
 
-    rgb12List = {
+    rgb_list_chinese = {
         "红色": (255, 0, 0),
         "橙红": (255, 51, 0),
         "橙色": (255, 102, 0),

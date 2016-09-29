@@ -20,14 +20,13 @@ class BuildIndexHandler(tornado.web.RequestHandler):
     """
     def get(self, type=None):
         self.write("please use post method")
-        
+
     @tornado.gen.coroutine
     def post(self, type=None):
         self.set_header('Content-Type', 'application/json')
         jsonM = Data()
 
         getJson = self.request.body
-
         jsondata = json.loads(getJson)
 
         __url = jsondata['query']['url']

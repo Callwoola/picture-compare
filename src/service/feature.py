@@ -1,8 +1,8 @@
 # coding:utf-8
-import math
-import operator
+
 from PIL import Image as im
 from src.detectors.phash import Phash
+from src.detectors.base import Base
 
 # 方向 base 的数据其实只需要提取一次啊, 囧~~
 class Feature:
@@ -15,6 +15,7 @@ class Feature:
     def __init__(self):
         # 注册所有的特征
         self.__reg(Phash())
+        self.__reg(Base())
 
     def __reg(self, instance_name = None):
         self.detector[

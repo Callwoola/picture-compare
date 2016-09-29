@@ -19,15 +19,19 @@ def mix_hash(score_list = {}):
     color = 0
     for detector in score_list:
         if detector is 'Phash':
-            phash = score_list[detector] * 1000
+            phash = score_list[detector] * 0.5
         if detector is 'Base':
-            base = score_list[detector] * 1.5
+            base = score_list[detector] * 9
         if detector is 'Mse':
             mse = score_list[detector] * 0.8
         if detector is 'Color':
             color = score_list[detector] * 1.1
 
     return (mse + phash + base + color)
+    # print '---'
+    # print phash
+    # print base
+    # return (base + phash)
 
 
 def process_match(origin_io=None, lists=None):
@@ -54,8 +58,10 @@ def process_match(origin_io=None, lists=None):
         bean = json.loads(data)
         result = {}
         # 使用算法到的
+        # 大色块比对方案
         result = feature.process([
-            'Phash'
+            # 'Phash',
+            'Base'
         ])
 
         # merge calculate score
@@ -75,12 +81,6 @@ class Match:
     Compare Image differ  I find some useful function
     Maybe Some function would suit for you Project
     '''
-    image_a_path = ""
-    image_b_path = ""
-
-    value_of_phash = None
-    value_of_mse = None
-    value_of_perceptualHash = None
 
     # 原对比文件 的 byte 属性
     origin_io_image = None
@@ -145,6 +145,5 @@ class Match:
         item_id = 0
 
         # 处理 image 在内存里面的数据
-        print 'im here'
         self.manage.remove_base_image_file()
         return sortedList
