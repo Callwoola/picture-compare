@@ -101,7 +101,7 @@ class Match:
             raise Exception('Origin image is empty')
         self.manage.store_base_image(image_url)
 
-    def get_match_result(self, terms = None):
+    def get_match_result(self, terms = None, page_size = None):
         '''
         :param data:
         :return: list | None
@@ -109,7 +109,10 @@ class Match:
         # 设置原图数据
         self.origin_io_image = self.manage.get_base_image()
 
-        limit = self.result_size
+        limit = page_size
+        if page_size is None:
+            limit = self.result_size
+
         the_list = self.manage.search(terms)
         # 删除缓存数据
         if Manage.base_image_name in the_list:

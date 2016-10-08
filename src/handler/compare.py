@@ -24,7 +24,13 @@ class pcHandler(App):
         except:
             terms = None
 
+        # 返回数据限定
+        try:
+            page_size = jsondata['size']
+        except:
+            page_size = None
+
         # 开始比对
-        resultDict = self.match.get_match_result(terms)
+        resultDict = self.match.get_match_result(terms, page_size)
 
         self.result(resultDict)
