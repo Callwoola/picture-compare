@@ -72,7 +72,9 @@ class CleaerIndexHandler(tornado.web.RequestHandler):
     def delete(self, type=None):
         try:
             # os.remove(os.environ[config.STORAGE_INDEX_DB])
-            Manage().clear_db()
+            Manage(
+                self.application.r
+            ).clear_db()
         except:
             pass
         self.set_header('Content-Type', 'application/json')
