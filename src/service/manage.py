@@ -60,8 +60,9 @@ class Manage:
         for i in __sort_dict:
             if i in source_data:
                 k_name += str(__sort_dict[i]) + '=' + str(source_data[i])
-                if __sort_dict.keys()[-1] is not i:
-                    k_name += '-'
+                # 不是最后一个 那么加上 - 连接符号
+                # if __sort_dict.keys()[-1] is not i:
+                k_name += '-'
 
         return k_name
 
