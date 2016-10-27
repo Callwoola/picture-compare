@@ -7,6 +7,7 @@ class Detector:
     _weight = 1
     # 储存 原 对比数据, 避免又一次计算
     _base_image = None
+    _base_image_for_opencv = None
     # 注册名称
     def get_name(self):
         return self.__class__.__name__

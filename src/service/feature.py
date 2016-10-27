@@ -14,6 +14,23 @@ class Feature:
     '''
     detector = {}
 
+    # 预注册特征
+    __default_feature = [
+        # 'Phash',
+        'Base',
+        # 'Color',
+        # 'Mse',
+    ]
+
+    # 使用比特码对比
+    byte_base = None
+    byte_storage = None
+
+    # 算法特征
+    # 将原对比图片 预先出错 , 避免 重复计算
+    base_image_trait_for_image = None
+    base_image_trait_for_cv = None
+
     def __init__(self):
         # 注册所有的特征
         self.__reg(Phash())
@@ -27,6 +44,12 @@ class Feature:
         ] = instance_name
 
     def process(self, detector_list = []):
+        '''
+        : 每个进程都会使用这个 Process,  出现了一些问题??
+        '''
+        if (detector_list is None) or (not len(detector_list) > 0):
+            detector_list = self.__default_feature
+
         result = {}
         for single_feature in self.detector:
             if single_feature in detector_list:
@@ -35,15 +58,6 @@ class Feature:
                     self.byte_storage
                 )
         return result
-
-    # 使用比特码对比
-    byte_base = None
-    byte_storage = None
-
-    # 算法特征
-    # 将原对比图片 预先出错 , 避免 重复计算
-    base_image_trait_for_image = None
-    base_image_trait_for_cv = None
 
     def set_byte_base_image(self, byte):
         self.byte_base = byte

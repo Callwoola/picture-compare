@@ -29,8 +29,20 @@ class Base(Detector):
         h2 = image2.convert('RGB').histogram()
 
         rms = math.sqrt(
-            reduce(operator.add, list(map(lambda a, b: (a - b) ** 2, self._base_image, h2)))
+            reduce(
+                operator.add,
+                list(
+                    map(
+                        lambda a, b: (a - b) ** 2, self._base_image, h2
+                    )
+                )
+            )
             /
             len(self._base_image)
         )
+        print rms
+        # 如果这个  histigram 波浪太大就过滤掉
+        # wave = reduce(lambda o,n: abs(0-n),image2.convert('RGB').histogram())
+        # return wave
+
         return rms
