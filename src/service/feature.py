@@ -3,6 +3,8 @@
 from PIL import Image as im
 from src.detectors.phash import Phash
 from src.detectors.base import Base
+from src.detectors.color import Color
+from src.detectors.mse import Mse
 
 # 方向 base 的数据其实只需要提取一次啊, 囧~~
 class Feature:
@@ -16,6 +18,8 @@ class Feature:
         # 注册所有的特征
         self.__reg(Phash())
         self.__reg(Base())
+        self.__reg(Color())
+        self.__reg(Mse())
 
     def __reg(self, instance_name = None):
         self.detector[
@@ -24,9 +28,9 @@ class Feature:
 
     def process(self, detector_list = []):
         result = {}
-        for i in self.detector:
-            if i in detector_list:
-                result[i] = self.detector[i].calculate(
+        for single_feature in self.detector:
+            if single_feature in detector_list:
+                result[single_feature] = self.detector[single_feature].calculate(
                     self.byte_base,
                     self.byte_storage
                 )

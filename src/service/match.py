@@ -61,7 +61,9 @@ def process_match(origin_io=None, lists=None):
         # 大色块比对方案
         result = feature.process([
             # 'Phash',
-            'Base'
+            # 'Base'
+            # 'Color',
+            'Mse',
         ])
 
         # merge calculate score
