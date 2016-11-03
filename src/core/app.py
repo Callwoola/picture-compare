@@ -49,7 +49,7 @@ class App(tornado.web.RequestHandler):
         '''
         : 处理失败问题
         '''
-        self.set_status(500)
+        self.set_status(200)
         self.set_header('Content-Type', 'application/json')
         self.write(
             self.data
