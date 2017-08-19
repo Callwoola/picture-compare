@@ -66,6 +66,7 @@ class Application(tornado.web.Application):
 
 # start run
 def main():
+    print 'Running...'
     # 服务启动的进程
     num_processes = 1
     app_port = config['port']
