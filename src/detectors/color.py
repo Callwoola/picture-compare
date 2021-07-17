@@ -29,7 +29,10 @@ class Color(Detector):
 
         RGB_B = getRgb(local)
 
+
         # if len(RGB_A) == 3 and len(RGB_B) == 3:
         score = (RGB_A[0] - RGB_B[0]) ** 2 + (RGB_A[1] - RGB_B[1]) ** 2 + (RGB_A[2] - RGB_B[2]) ** 2
-        return abs(score)
+        # 需要一个最大数 , 的到百分比
+        score = (float(abs(score)) / 195075) * 100
 
+        return score

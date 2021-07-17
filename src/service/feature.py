@@ -18,7 +18,7 @@ class Feature:
     __default_feature = [
         # 'Phash',
         'Base',
-        # 'Color',
+        'Color',
         # 'Mse',
     ]
 

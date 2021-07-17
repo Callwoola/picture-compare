@@ -27,7 +27,8 @@ class Base(Detector):
 
         image2 = im.open(local)
         h2 = image2.convert('RGB').histogram()
-
+        print max(h2)
+        # max coordinate : 768 (RGB)
         rms = math.sqrt(
             reduce(
                 operator.add,
@@ -40,7 +41,7 @@ class Base(Detector):
             /
             len(self._base_image)
         )
-        print rms
+
         # 如果这个  histigram 波浪太大就过滤掉
         # wave = reduce(lambda o,n: abs(0-n),image2.convert('RGB').histogram())
         # return wave

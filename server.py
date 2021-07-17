@@ -40,10 +40,10 @@ class Application(tornado.web.Application):
         settings = dict(
             template_path = os.path.join(os.path.dirname(__file__), "src/template"),
             static_path = os.path.join(os.path.dirname(__file__), "src/static"),
-            autoreload=False,
-            debug=False,
-            # autoreload = True,
-            # debug = True
+            # autoreload=False,
+            # debug=False,
+            autoreload = True,
+            debug = True,
         )
 
         self.config = config
